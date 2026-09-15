@@ -7,6 +7,8 @@ const STARTING_MONEY := 100
 ## Dalga bitince verilen bonus: taban + dalga numarası × artış (1. dalga 20, 12. dalga 75).
 const WAVE_BONUS_BASE := 15
 const WAVE_BONUS_PER_WAVE := 5
+## 2x butonuna basılıyken oyunun akış hızı.
+const FAST_SPEED := 2.0
 
 var lives := STARTING_LIVES
 var money := STARTING_MONEY
@@ -28,6 +30,7 @@ func _ready() -> void:
 	hud.tower_menu.sell_requested.connect(_on_sell_requested)
 	hud.pause_requested.connect(_pause)
 	hud.early_call_requested.connect(_on_early_call_requested)
+	hud.speed_toggled.connect(_on_speed_toggled)
 	overlay.resume_requested.connect(_resume)
 	overlay.restart_requested.connect(_restart)
 	overlay.quit_requested.connect(get_tree().quit)
@@ -105,6 +108,15 @@ func _close_menus() -> void:
 		_selected_slot = null
 	hud.build_menu.hide()
 	hud.tower_menu.close()
+
+
+func _exit_tree() -> void:
+	# Yeniden başlatma veya menüye dönüşte hızlandırma sonraki oyuna taşınmasın.
+	Engine.time_scale = 1.0
+
+
+func _on_speed_toggled(fast: bool) -> void:
+	Engine.time_scale = FAST_SPEED if fast else 1.0
 
 
 func _on_early_call_requested() -> void:

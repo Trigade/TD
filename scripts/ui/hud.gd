@@ -5,6 +5,7 @@ extends CanvasLayer
 
 signal pause_requested
 signal early_call_requested
+signal speed_toggled(fast: bool)
 
 const ANNOUNCE_TIME := 1.5
 const NOTIFY_TIME := 2.2
@@ -24,11 +25,13 @@ var _lives_tween: Tween
 @onready var _banner_label: Label = $Banner/Margin/Label
 @onready var _notifications: VBoxContainer = $Notifications
 @onready var _pause_button: Button = $PauseButton
+@onready var _speed_button: Button = $SpeedButton
 @onready var _early_call: Button = $EarlyCallButton
 
 
 func _ready() -> void:
 	_pause_button.pressed.connect(pause_requested.emit)
+	_speed_button.toggled.connect(speed_toggled.emit)
 	_early_call.pressed.connect(early_call_requested.emit)
 
 
