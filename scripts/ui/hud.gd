@@ -3,6 +3,7 @@ extends CanvasLayer
 
 ## Geçici arayüz: can, para, dalga ve durum mesajlarını gösterir. Asıl arayüz sonraki adımlarda gelecek.
 
+@onready var build_menu: BuildMenu = $BuildMenu
 @onready var _stats: Label = $Stats
 @onready var _message: Label = $Message
 

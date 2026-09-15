@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/towers/tower_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+display_name = "Foton Tareti"
+description = "Ucuz ve hızlı ateş eder. Zırha karşı zayıftır."
+cost = 50
+damage = 12.0
+fire_rate = 3.0
+attack_range = 220.0
+projectile_speed = 1000.0
+sides = 4
+color = Color(0.45, 0.9, 1, 1)

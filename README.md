@@ -39,12 +39,15 @@ Godot 4.7 ile `project.godot` dosyasını aç ve **F5**'e bas.
 scenes/        Sahneler (.tscn)
   map/         Harita parçaları (kule noktası vb.)
   enemies/     Düşman sahnesi
-  ui/          Arayüz
+  towers/      Kule ve mermi sahneleri
+  ui/          Arayüz ve inşa menüsü
 scripts/       GDScript kodları
   map/         Arka plan, yol, kule noktası, istasyon
   enemies/     Düşman davranışı ve EnemyData
+  towers/      Kule, mermi ve TowerData
   waves/       Dalga tablosu (wave_table.gd) ve dalga yöneticisi
-  ui/          Arayüz
+  ui/          Arayüz ve inşa menüsü (menüdeki kule listesi build_menu.gd içinde)
 resources/
   enemies/     Düşman değerleri (.tres) — denge ayarı buradan
+  towers/      Kule değerleri (.tres)
 ```
