@@ -1,0 +1,10 @@
+# Godot
+.godot/
+/android/
+
+# Export çıktıları
+/build/
+
+# İşletim sistemi
+.DS_Store
+Thumbs.db
