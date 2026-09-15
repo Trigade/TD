@@ -13,6 +13,7 @@ Oyun sadece sol tık ve ESC ile oynanır (MacBook trackpad dostu).
 - **Sol tık:** Boş kule noktasına tıkla → kule inşa et. Kurulu kuleye tıkla → yükselt veya sat.
 - **ESC:** Açık menüyü kapatır; menü yoksa oyunu duraklatır; duraklatma ekranında oyuna döner.
 - **Duraklat** (sağ üst): ESC ile aynı duraklatma ekranı.
+- **2x** (sağ üst): Basılıyken oyun iki kat hızlı akar.
 - **Dalgayı çağır** (sağ üst, geri sayım sırasında): Sıradaki dalgayı hemen başlatır, kalan her saniye için +3 para verir.
 
 ## İlk sürüm (MVP) kapsamı
@@ -47,8 +48,11 @@ Değerler ilk tahminlerdir; denge ayarı `resources/towers/*.tres` dosyalarında
 | Keşif Dronu | 60 | 110 | 0 | 5 | 1 | Temel düşman |
 | Sürü | 25 | 170 | 0 | 3 | 1 | Kalabalık, hızlı, zayıf |
 | Zırhlı Kruvazör | 300 | 60 | 10 | 20 | 3 | Zırh her vuruştan sabit hasar düşer (en az 1 hasar geçer) |
+| Kuluçka | 160 | 75 | 2 | 5 | 2 | Ölünce yerinde 4 Sürü çıkar (aynı dalga gücüyle) |
+| **Eta Canavarı** (boss) | 2000 | 32 | 8 | 250 | 50 | 7 sn'de bir EMP yayar: 260 px içindeki kuleler 2.5 sn ateş edemez. Ekranda ayrı can çubuğu vardır. |
 
-Tablodaki canlar 1. dalga değerleridir; düşman canı her dalgada %15 artar (12. dalgada 2.65 kat).
+Tablodaki canlar 1. dalga değerleridir; düşman canı her dalgada %16 artar (13. boss dalgasında 2.92 kat).
+Oyun 13 dalgadır; 13. dalga Eta Canavarı ve eskortlarından oluşan **boss dalgasıdır**.
 
 ## Ekonomi ve zorluk
 
@@ -73,7 +77,10 @@ Güncel sonuçlar ve hedefler:
 | `plazma_yukselt` | Sadece Plazma + yükseltme | 8. dalgada kayıp | Tek tip kule yetmemeli |
 | `foton` | Sadece 1. seviye Foton | 9. dalgada kayıp | Orta dalgalarda kaybetmeli |
 | `foton_yukselt` | Sadece Foton + yükseltme | 11. dalgada kayıp | Son dalgalarda zorlanmalı |
-| `karma` | 4 kuleyi planlı kullanır | Zafer, 14 can | Biraz can kaybederek kazanmalı |
+| `karma` | 4 kuleyi planlı kullanır | Zafer, 20 can (boss 5840 canla gelir ve ölür) | Kazanmalı |
+
+Simülasyon sonunda boss'un kalan canını ve istasyona sızan düşmanları da yazar.
+Boss canı 6700 civarına çıkınca `karma` planı boss'u yetiştiremiyor; 2000 temel can bu sınırın ~%12 altındadır.
 
 ## Klasör yapısı
 

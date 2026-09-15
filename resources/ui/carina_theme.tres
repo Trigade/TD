@@ -94,8 +94,29 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_background"]
+bg_color = Color(0.03, 0.04, 0.08, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.78, 0.92, 0.4)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
+bg_color = Color(0.95, 0.3, 0.45, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font_size = 24
+ProgressBar/styles/background = SubResource("StyleBoxFlat_progress_background")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_progress_fill")
 Button/colors/font_color = Color(0.88, 0.93, 1, 1)
 Button/colors/font_disabled_color = Color(0.45, 0.5, 0.58, 1)
 Button/colors/font_focus_color = Color(0.88, 0.93, 1, 1)

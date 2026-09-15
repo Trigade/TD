@@ -10,6 +10,8 @@ const BARREL_LENGTH := 38.0
 const BODY_COLOR := Color(0.08, 0.12, 0.18)
 ## Satışta geri verilen harcama oranı.
 const SELL_RATIO := 0.7
+## EMP ile devre dışı kalan kulenin rengi.
+const DISABLED_TINT := Color(0.4, 0.4, 0.5)
 
 var data: TowerData
 ## İnşa ve yükseltmelere harcanan toplam para.
@@ -21,6 +23,21 @@ var show_range := false:
 
 var _cooldown := 0.0
 var _aim_angle := -PI / 2.0
+var _disabled_time_left := 0.0
+
+
+func _ready() -> void:
+	add_to_group("towers")
+
+
+## EMP gibi etkilerle kuleyi bir süre susturur; üst üste gelirse uzun olan geçerlidir.
+func disable(duration: float) -> void:
+	_disabled_time_left = maxf(_disabled_time_left, duration)
+	modulate = DISABLED_TINT
+
+
+func is_disabled() -> bool:
+	return _disabled_time_left > 0.0
 
 
 func upgrade() -> void:
@@ -35,6 +52,11 @@ func sell_value() -> int:
 
 func _process(delta: float) -> void:
 	_cooldown = maxf(_cooldown - delta, 0.0)
+	if _disabled_time_left > 0.0:
+		_disabled_time_left -= delta
+		if _disabled_time_left > 0.0:
+			return
+		modulate = Color.WHITE
 	match data.attack_mode:
 		TowerData.AttackMode.PROJECTILE:
 			_process_projectile()

@@ -41,6 +41,7 @@ func _ready() -> void:
 	wave_manager.all_waves_cleared.connect(_on_all_waves_cleared)
 	wave_manager.enemy_reached_end.connect(_on_enemy_reached_end)
 	wave_manager.enemy_killed.connect(_on_enemy_killed)
+	wave_manager.boss_spawned.connect(hud.show_boss)
 	_refresh_hud()
 
 
@@ -133,7 +134,10 @@ func _on_countdown_changed(seconds_left: float) -> void:
 
 func _on_wave_started(wave_number: int, total_waves: int) -> void:
 	hud.hide_countdown()
-	hud.announce_wave(wave_number, total_waves)
+	if wave_manager.is_boss_wave(wave_number):
+		hud.announce_boss_wave(wave_number, total_waves)
+	else:
+		hud.announce_wave(wave_number, total_waves)
 	_refresh_hud()
 	print("Dalga %d/%d başladı" % [wave_number, total_waves])
 

@@ -9,16 +9,19 @@ signal wave_cleared(wave_number: int)
 signal all_waves_cleared
 signal enemy_reached_end(enemy: Enemy)
 signal enemy_killed(enemy: Enemy)
+signal boss_spawned(enemy: Enemy)
 
 enum State { COUNTDOWN, RUNNING, FINISHED }
 
 const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
+## Bölünen düşmandan çıkanların yol üzerindeki aralığı (piksel).
+const SPLIT_SPACING := 14.0
 
 @export var path: Path2D
 @export var first_wave_delay := 5.0
 @export var break_between_waves := 8.0
-## Her dalgada düşman canına eklenen oran: 0.15 ile 2. dalga %115, 12. dalga %265 can.
-@export var health_growth_per_wave := 0.15
+## Her dalgada düşman canına eklenen oran: 0.16 ile 2. dalga %116, 13. (boss) dalga %292 can.
+@export var health_growth_per_wave := 0.16
 ## Geri sayım sırasında dalga erken çağrılınca kalan her saniye için verilen para.
 @export var early_call_bonus_per_second := 3
 
@@ -47,13 +50,22 @@ func _process(delta: float) -> void:
 		State.RUNNING:
 			_wave_time += delta
 			while not _pending.is_empty() and _pending[0].time <= _wave_time:
-				_spawn(_pending.pop_front().enemy)
+				_spawn(_pending.pop_front().enemy, _wave_health_multiplier())
 			if _pending.is_empty() and _alive == 0:
 				_finish_wave()
 
 
 func total_waves() -> int:
 	return WaveTable.WAVES.size()
+
+
+func is_boss_wave(wave_number: int) -> bool:
+	if wave_number < 1 or wave_number > total_waves():
+		return false
+	for group in WaveTable.WAVES[wave_number - 1]:
+		if group.enemy.is_boss:
+			return true
+	return false
 
 
 func is_counting_down() -> bool:
@@ -103,14 +115,21 @@ func _finish_wave() -> void:
 		_start_countdown(break_between_waves)
 
 
-func _spawn(data: EnemyData) -> void:
+func _wave_health_multiplier() -> float:
+	return 1.0 + health_growth_per_wave * (current_wave - 1)
+
+
+func _spawn(data: EnemyData, health_multiplier: float, at_progress := 0.0) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	enemy.data = data
-	enemy.health_multiplier = 1.0 + health_growth_per_wave * (current_wave - 1)
+	enemy.health_multiplier = health_multiplier
 	enemy.reached_end.connect(_on_enemy_reached_end)
 	enemy.died.connect(_on_enemy_died)
 	path.add_child(enemy)
+	enemy.progress = at_progress
 	_alive += 1
+	if data.is_boss:
+		boss_spawned.emit(enemy)
 
 
 func _on_enemy_reached_end(enemy: Enemy) -> void:
@@ -121,3 +140,7 @@ func _on_enemy_reached_end(enemy: Enemy) -> void:
 func _on_enemy_died(enemy: Enemy) -> void:
 	_alive -= 1
 	enemy_killed.emit(enemy)
+	# Bölünen düşmanın parçaları öldüğü yerin hemen arkasında, aynı güçte çıkar.
+	if enemy.data.split_into:
+		for i in enemy.data.split_count:
+			_spawn(enemy.data.split_into, enemy.health_multiplier, maxf(enemy.progress - i * SPLIT_SPACING, 0.0))

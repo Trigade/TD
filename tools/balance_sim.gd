@@ -20,6 +20,13 @@ var strategy := ""
 var plan: Array = []
 var spent := 0
 var done := false
+var boss: Enemy
+var boss_seen := false
+## Boss'un son görülen can oranı; sahneden silinse de kaybolmasın diye her karede kaydedilir.
+var boss_left := 1.0
+var boss_max_health := 0.0
+## İstasyona ulaşan düşmanlar: ad -> sayı
+var leaks := {}
 
 
 func _initialize() -> void:
@@ -32,9 +39,13 @@ func _initialize() -> void:
 	await process_frame
 	main.wave_manager.wave_cleared.connect(_on_wave_cleared)
 	main.wave_manager.all_waves_cleared.connect(_finish.bind("ZAFER"))
+	main.wave_manager.boss_spawned.connect(_on_boss_spawned)
+	main.wave_manager.enemy_reached_end.connect(_on_enemy_leaked)
 
 	while not done:
 		await process_frame
+		if is_instance_valid(boss):
+			boss_left = boss.health / boss.max_health
 		if paused:
 			_finish("KAYIP")
 			break
@@ -111,6 +122,17 @@ func _run_plan() -> void:
 		plan.pop_front()
 
 
+func _on_enemy_leaked(enemy: Enemy) -> void:
+	leaks[enemy.data.display_name] = leaks.get(enemy.data.display_name, 0) + 1
+
+
+func _on_boss_spawned(enemy: Enemy) -> void:
+	boss = enemy
+	boss_seen = true
+	boss_max_health = enemy.max_health
+	enemy.died.connect(func(_enemy: Enemy) -> void: boss_left = 0.0)
+
+
 func _on_wave_cleared(wave: int) -> void:
 	print("SIM %-15s | dalga %2d | can %2d | para %4d | harcanan %5d | kalan plan %2d" % [strategy, wave, main.lives, main.money, spent, plan.size()])
 
@@ -119,5 +141,13 @@ func _finish(result: String) -> void:
 	if done:
 		return
 	done = true
-	print("SONUÇ %-15s | %s | dalga %2d | can %2d | kalan para %4d | harcanan %5d" % [strategy, result, main.wave_manager.current_wave, main.lives, main.money, spent])
+	var boss_note := ""
+	if boss_seen:
+		boss_note = " | boss kalan can %%%d / %d" % [roundi(maxf(boss_left, 0.0) * 100.0), boss_max_health]
+	var leak_parts := PackedStringArray()
+	for enemy_name in leaks:
+		leak_parts.append("%s x%d" % [enemy_name, leaks[enemy_name]])
+	if not leak_parts.is_empty():
+		boss_note += " | sızan: " + ", ".join(leak_parts)
+	print("SONUÇ %-15s | %s | dalga %2d | can %2d | kalan para %4d | harcanan %5d%s" % [strategy, result, main.wave_manager.current_wave, main.lives, main.money, spent, boss_note])
 	quit()

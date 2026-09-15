@@ -10,6 +10,7 @@ const HEALTH_BAR_SIZE := Vector2(34, 5)
 const HEALTH_BAR_BACK := Color(0, 0, 0, 0.6)
 const HEALTH_BAR_FILL := Color(0.4, 1.0, 0.5)
 const SLOW_RING_COLOR := Color(0.6, 0.5, 1.0, 0.8)
+const EMP_COLOR := Color(1.0, 0.3, 0.45)
 
 var data: EnemyData
 ## Dalga ilerledikçe düşmanları güçlendirmek için temel canı çarpar; sahneye eklenmeden önce ayarlanır.
@@ -20,11 +21,14 @@ var health: float
 var _heading := 0.0
 var _slow_factor := 0.0
 var _slow_time_left := 0.0
+var _emp_time_left := 0.0
+var _spin := 0.0
 
 
 func _ready() -> void:
 	max_health = data.max_health * health_multiplier
 	health = max_health
+	_emp_time_left = data.emp_interval
 	add_to_group("enemies")
 
 
@@ -33,6 +37,13 @@ func _process(delta: float) -> void:
 		_slow_time_left -= delta
 		if _slow_time_left <= 0.0:
 			_slow_factor = 0.0
+
+	if data.emp_interval > 0.0:
+		_emp_time_left -= delta
+		if _emp_time_left <= 0.0:
+			_emp_time_left = data.emp_interval
+			_emit_emp()
+	_spin += delta
 
 	var previous := position
 	progress += data.speed * (1.0 - _slow_factor) * delta
@@ -67,6 +78,13 @@ func apply_slow(factor: float, duration: float) -> void:
 	_slow_time_left = maxf(_slow_time_left, duration)
 
 
+func _emit_emp() -> void:
+	for tower: Tower in get_tree().get_nodes_in_group("towers"):
+		if tower.global_position.distance_to(global_position) <= data.emp_radius:
+			tower.disable(data.emp_duration)
+	RingEffect.spawn(get_parent(), global_position, data.emp_radius, EMP_COLOR)
+
+
 func _draw() -> void:
 	# İlk köşe hareket yönüne bakar; üçgen düşmanlar böylece gittiği yönü gösterir.
 	var shape := PackedVector2Array()
@@ -76,10 +94,20 @@ func _draw() -> void:
 	shape.append(shape[0])
 	draw_polyline(shape, data.color, 3.0, true)
 
+	if data.emp_interval > 0.0:
+		# Dönen çekirdek ve bir sonraki EMP'ye kadar dolan halka.
+		var core := PackedVector2Array()
+		for i in 3:
+			core.append(Vector2.from_angle(_spin * 2.0 + TAU * i / 3.0) * data.radius * 0.4)
+		draw_colored_polygon(core, EMP_COLOR)
+		var charge := 1.0 - _emp_time_left / data.emp_interval
+		draw_arc(Vector2.ZERO, data.radius * 0.6, -PI / 2.0, -PI / 2.0 + TAU * charge, 32, EMP_COLOR, 3.0, true)
+
 	if _slow_factor > 0.0:
 		draw_arc(Vector2.ZERO, data.radius + 7.0, 0.0, TAU, 32, SLOW_RING_COLOR, 2.0, true)
 
-	if health < max_health:
+	# Boss'un can çubuğu arayüzde gösterilir.
+	if health < max_health and not data.is_boss:
 		var origin := Vector2(-HEALTH_BAR_SIZE.x * 0.5, -data.radius - 14.0)
 		var fill := Vector2(HEALTH_BAR_SIZE.x * health / max_health, HEALTH_BAR_SIZE.y)
 		draw_rect(Rect2(origin, HEALTH_BAR_SIZE), HEALTH_BAR_BACK)
