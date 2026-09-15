@@ -9,11 +9,14 @@ signal died(enemy: Enemy)
 const HEALTH_BAR_SIZE := Vector2(34, 5)
 const HEALTH_BAR_BACK := Color(0, 0, 0, 0.6)
 const HEALTH_BAR_FILL := Color(0.4, 1.0, 0.5)
+const SLOW_RING_COLOR := Color(0.6, 0.5, 1.0, 0.8)
 
 var data: EnemyData
 var health: float
 
 var _heading := 0.0
+var _slow_factor := 0.0
+var _slow_time_left := 0.0
 
 
 func _ready() -> void:
@@ -22,8 +25,13 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if _slow_time_left > 0.0:
+		_slow_time_left -= delta
+		if _slow_time_left <= 0.0:
+			_slow_factor = 0.0
+
 	var previous := position
-	progress += data.speed * delta
+	progress += data.speed * (1.0 - _slow_factor) * delta
 	var movement := position - previous
 	if not movement.is_zero_approx():
 		_heading = movement.angle()
@@ -36,13 +44,23 @@ func _process(delta: float) -> void:
 
 
 ## Zırh her vuruştan sabit miktar düşer, ama her vuruş en az 1 hasar verir.
-func take_damage(amount: float) -> void:
+## armor_piercing zırhın ne kadarının yok sayılacağını belirler (0–1).
+func take_damage(amount: float, armor_piercing := 0.0) -> void:
 	if health <= 0.0:
 		return
-	health -= maxf(amount - data.armor, 1.0)
+	var armor := data.armor * (1.0 - armor_piercing)
+	health -= maxf(amount - armor, 1.0)
 	if health <= 0.0:
 		died.emit(self)
 		queue_free()
+
+
+## Yavaşlatmalar üst üste binmez; o an en güçlü olanı geçerlidir.
+func apply_slow(factor: float, duration: float) -> void:
+	if factor < _slow_factor:
+		return
+	_slow_factor = factor
+	_slow_time_left = maxf(_slow_time_left, duration)
 
 
 func _draw() -> void:
@@ -54,8 +72,11 @@ func _draw() -> void:
 	shape.append(shape[0])
 	draw_polyline(shape, data.color, 3.0, true)
 
+	if _slow_factor > 0.0:
+		draw_arc(Vector2.ZERO, data.radius + 7.0, 0.0, TAU, 32, SLOW_RING_COLOR, 2.0, true)
+
 	if health < data.max_health:
-		var origin := Vector2(-HEALTH_BAR_SIZE.x * 0.5, -data.radius - 12.0)
+		var origin := Vector2(-HEALTH_BAR_SIZE.x * 0.5, -data.radius - 14.0)
 		var fill := Vector2(HEALTH_BAR_SIZE.x * health / data.max_health, HEALTH_BAR_SIZE.y)
 		draw_rect(Rect2(origin, HEALTH_BAR_SIZE), HEALTH_BAR_BACK)
 		draw_rect(Rect2(origin, fill), HEALTH_BAR_FILL)

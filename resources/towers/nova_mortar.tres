@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/towers/tower_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+display_name = "Nova Havanı"
+description = "Çarptığı yerde patlar, etraftaki tüm düşmanlara hasar verir. Sürülere karşı etkili."
+cost = 120
+damage = 30.0
+fire_rate = 0.7
+attack_range = 240.0
+projectile_speed = 550.0
+splash_radius = 90.0
+sides = 8
+color = Color(1, 0.82, 0.35, 1)
+barrel_width = 12.0

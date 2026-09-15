@@ -17,12 +17,14 @@ Godot 4.7 ile `project.godot` dosyasını aç ve **F5**'e bas.
 
 ## Kuleler
 
-| Kule | Rolü | Özellik |
-|---|---|---|
-| Foton Tareti | Temel | Ucuz, hızlı ateş, düşük hasar, tek hedef |
-| Plazma Topu | Ağır hasar | Yavaş, güçlü, zırh deler |
-| Nova Havanı | Alan hasarı | Sürülere karşı patlama |
-| Yerçekimi Kuyusu | Destek | Alanındaki düşmanları yavaşlatır |
+| Kule | Rolü | Fiyat | Hasar | Atış/sn | Menzil | Özellik |
+|---|---|---|---|---|---|---|
+| Foton Tareti | Temel | 50 | 12 | 3 | 220 | Ucuz, hızlı ateş, tek hedef |
+| Yerçekimi Kuyusu | Destek | 80 | 3 | 1.5 | 170 | Menzildeki herkesi 1 sn %45 yavaşlatır |
+| Plazma Topu | Ağır hasar | 100 | 70 | 0.6 | 260 | Zırhı tamamen deler |
+| Nova Havanı | Alan hasarı | 120 | 30 | 0.7 | 240 | 90 px yarıçapta patlar |
+
+Değerler ilk tahminlerdir; denge ayarı `resources/towers/*.tres` dosyalarından yapılır.
 
 ## Düşmanlar
 

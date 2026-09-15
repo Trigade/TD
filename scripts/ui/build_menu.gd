@@ -8,6 +8,9 @@ signal tower_chosen(data: TowerData)
 ## Menüde sunulan kuleler; yeni kule tipleri buraya eklenir.
 const TOWERS := [
 	preload("res://resources/towers/photon_turret.tres"),
+	preload("res://resources/towers/gravity_well.tres"),
+	preload("res://resources/towers/plasma_cannon.tres"),
+	preload("res://resources/towers/nova_mortar.tres"),
 ]
 ## Menünün kule noktasına göre konumu.
 const OFFSET := Vector2(60, -50)

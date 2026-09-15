@@ -1,12 +1,16 @@
 class_name Projectile
 extends Node2D
 
-## Hedefine doğru uçan mermi. Hedef yolda ölürse son bilinen konumuna varıp kaybolur.
+## Hedefine doğru uçan mermi. Hedef yolda ölürse son bilinen konumuna varır:
+## alan hasarlı mermi yine de patlar, tek hedefli mermi boşa gider.
 
 var target: Enemy
 var damage := 0.0
 var speed := 900.0
+var armor_piercing := 0.0
+var splash_radius := 0.0
 var color := Color.WHITE
+var thickness := 4.0
 
 var _destination: Vector2
 
@@ -22,13 +26,22 @@ func _process(delta: float) -> void:
 	var to_destination := _destination - global_position
 	var step := speed * delta
 	if to_destination.length() <= step:
-		if _target_alive():
-			target.take_damage(damage)
-		queue_free()
+		_impact()
 		return
 
 	global_position += to_destination.normalized() * step
 	rotation = to_destination.angle()
+
+
+func _impact() -> void:
+	if splash_radius > 0.0:
+		for enemy: Enemy in get_tree().get_nodes_in_group("enemies"):
+			if enemy.global_position.distance_to(_destination) <= splash_radius + enemy.data.radius:
+				enemy.take_damage(damage, armor_piercing)
+		RingEffect.spawn(get_parent(), _destination, splash_radius, color)
+	elif _target_alive():
+		target.take_damage(damage, armor_piercing)
+	queue_free()
 
 
 func _target_alive() -> bool:
@@ -36,5 +49,9 @@ func _target_alive() -> bool:
 
 
 func _draw() -> void:
-	draw_line(Vector2(-12, 0), Vector2(4, 0), color, 4.0, true)
-	draw_circle(Vector2(4, 0), 3.0, Color.WHITE)
+	if splash_radius > 0.0:
+		draw_circle(Vector2.ZERO, thickness, color)
+		draw_circle(Vector2.ZERO, thickness * 0.45, Color.WHITE)
+	else:
+		draw_line(Vector2(-12, 0), Vector2(4, 0), color, thickness, true)
+		draw_circle(Vector2(4, 0), thickness * 0.75, Color.WHITE)

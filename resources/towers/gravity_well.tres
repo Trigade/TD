@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/towers/tower_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+display_name = "Yerçekimi Kuyusu"
+description = "Menzilindeki tüm düşmanları yavaşlatır ve az hasar verir."
+cost = 80
+attack_mode = 1
+damage = 3.0
+fire_rate = 1.5
+attack_range = 170.0
+slow_factor = 0.45
+slow_duration = 1.0
+sides = 5
+color = Color(0.6, 0.5, 1, 1)
