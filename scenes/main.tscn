@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/map/station.gd" id="5_station"]
 [ext_resource type="Script" path="res://scripts/waves/wave_manager.gd" id="6_waves"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_overlay.tscn" id="8_overlay"]
 
 [sub_resource type="Curve2D" id="Curve2D_path"]
 _data = {
@@ -66,3 +67,5 @@ script = ExtResource("6_waves")
 path = NodePath("../EnemyPath")
 
 [node name="Hud" parent="." instance=ExtResource("7_hud")]
+
+[node name="GameOverlay" parent="." instance=ExtResource("8_overlay")]

@@ -19,6 +19,8 @@ const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
 @export var break_between_waves := 8.0
 ## Her dalgada düşman canına eklenen oran: 0.15 ile 2. dalga %115, 12. dalga %265 can.
 @export var health_growth_per_wave := 0.15
+## Geri sayım sırasında dalga erken çağrılınca kalan her saniye için verilen para.
+@export var early_call_bonus_per_second := 3
 
 ## 1'den başlar; 0 henüz hiçbir dalganın başlamadığı anlamına gelir.
 var current_wave := 0
@@ -52,6 +54,27 @@ func _process(delta: float) -> void:
 
 func total_waves() -> int:
 	return WaveTable.WAVES.size()
+
+
+func is_counting_down() -> bool:
+	return _state == State.COUNTDOWN
+
+
+## Şu an erken çağrılırsa verilecek bonus.
+func early_call_bonus() -> int:
+	if not is_counting_down():
+		return 0
+	return ceili(_countdown) * early_call_bonus_per_second
+
+
+## Geri sayımı atlayıp sıradaki dalgayı hemen başlatır ve kazanılan bonusu döndürür.
+## Sadece geri sayım sırasında çalışır; böylece dalgalar üst üste binmez.
+func call_next_wave_early() -> int:
+	if not is_counting_down():
+		return 0
+	var bonus := early_call_bonus()
+	_start_next_wave()
+	return bonus
 
 
 func _start_countdown(seconds: float) -> void:

@@ -6,6 +6,15 @@ Eta Carinae yörüngesindeki araştırma istasyonunu, Carina Nebulası'ndan gele
 
 Godot 4.7 ile `project.godot` dosyasını aç ve **F5**'e bas.
 
+## Kontroller
+
+Oyun sadece sol tık ve ESC ile oynanır (MacBook trackpad dostu).
+
+- **Sol tık:** Boş kule noktasına tıkla → kule inşa et. Kurulu kuleye tıkla → yükselt veya sat.
+- **ESC:** Açık menüyü kapatır; menü yoksa oyunu duraklatır; duraklatma ekranında oyuna döner.
+- **Duraklat** (sağ üst): ESC ile aynı duraklatma ekranı.
+- **Dalgayı çağır** (sağ üst, geri sayım sırasında): Sıradaki dalgayı hemen başlatır, kalan her saniye için +3 para verir.
+
 ## İlk sürüm (MVP) kapsamı
 
 - Tek harita, tek sabit yol, sabit kule noktaları

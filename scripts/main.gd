@@ -1,6 +1,6 @@
 extends Node2D
 
-## Ana sahne: haritayı, dalgaları, kule inşasını ve oyuncu durumunu (can, para) bir araya getirir.
+## Ana sahne: haritayı, dalgaları, kule inşasını, oyuncu durumunu (can, para) ve oyun akışını bir araya getirir.
 
 const STARTING_LIVES := 20
 const STARTING_MONEY := 100
@@ -17,6 +17,7 @@ var _selected_slot: TowerSlot
 @onready var tower_slots: Node2D = $TowerSlots
 @onready var wave_manager: WaveManager = $WaveManager
 @onready var hud: Hud = $Hud
+@onready var overlay: GameOverlay = $GameOverlay
 
 
 func _ready() -> void:
@@ -25,6 +26,11 @@ func _ready() -> void:
 	hud.build_menu.tower_chosen.connect(_on_tower_chosen)
 	hud.tower_menu.upgrade_requested.connect(_on_upgrade_requested)
 	hud.tower_menu.sell_requested.connect(_on_sell_requested)
+	hud.pause_requested.connect(_pause)
+	hud.early_call_requested.connect(_on_early_call_requested)
+	overlay.resume_requested.connect(_resume)
+	overlay.restart_requested.connect(_restart)
+	overlay.quit_requested.connect(get_tree().quit)
 
 	wave_manager.countdown_changed.connect(_on_countdown_changed)
 	wave_manager.wave_started.connect(_on_wave_started)
@@ -36,10 +42,18 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# ESC: açık bir menü varsa onu kapatır, yoksa oyunu duraklatır.
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		if _selected_slot:
+			_close_menus()
+		else:
+			_pause()
+		return
+
 	# Menü dışına yapılan tıklama menüyü kapatır. Tıklama bir kule noktasına denk geldiyse
 	# nokta bu olaydan sonra işlenir ve menüyü yeniden açar.
-	var clicked_outside: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
-	if clicked_outside or event.is_action_pressed("ui_cancel"):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_close_menus()
 
 
@@ -93,12 +107,19 @@ func _close_menus() -> void:
 	hud.tower_menu.close()
 
 
+func _on_early_call_requested() -> void:
+	money += wave_manager.call_next_wave_early()
+	_refresh_hud()
+
+
 func _on_countdown_changed(seconds_left: float) -> void:
 	hud.show_message("Dalga %d geliyor: %d" % [wave_manager.current_wave + 1, ceili(seconds_left)])
+	hud.show_early_call(wave_manager.early_call_bonus())
 
 
 func _on_wave_started(wave_number: int, total_waves: int) -> void:
 	hud.show_message("")
+	hud.hide_early_call()
 	_refresh_hud()
 	print("Dalga %d/%d başladı" % [wave_number, total_waves])
 
@@ -111,7 +132,8 @@ func _on_wave_cleared(wave_number: int) -> void:
 
 
 func _on_all_waves_cleared() -> void:
-	hud.show_message("Tüm dalgalar püskürtüldü!")
+	_end_game()
+	overlay.show_victory(lives)
 	print("Zafer!")
 
 
@@ -128,11 +150,33 @@ func _on_enemy_killed(enemy: Enemy) -> void:
 
 
 func _game_over() -> void:
-	# Ağacı durdurmak düşmanları ve dalgaları yerinde dondurur; yeniden başlatma menüsü sonra gelecek.
+	_end_game()
+	overlay.show_defeat(wave_manager.current_wave)
+	print("Oyun bitti — dalga %d" % wave_manager.current_wave)
+
+
+func _pause() -> void:
 	_close_menus()
 	get_tree().paused = true
-	hud.show_message("İstasyon düştü!")
-	print("Oyun bitti — dalga %d" % wave_manager.current_wave)
+	overlay.show_pause()
+
+
+func _resume() -> void:
+	overlay.hide()
+	get_tree().paused = false
+
+
+func _restart() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+
+## Oyunu durdurur; düşmanlar ve dalgalar yerinde donar, sonuç ekranı üstte kalır.
+func _end_game() -> void:
+	_close_menus()
+	hud.show_message("")
+	hud.hide_early_call()
+	get_tree().paused = true
 
 
 func _refresh_hud() -> void:
