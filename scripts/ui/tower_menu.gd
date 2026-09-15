@@ -51,14 +51,21 @@ func refresh(money: int) -> void:
 
 static func describe(data: TowerData) -> String:
 	var lines := PackedStringArray()
-	lines.append("Hasar: %s" % String.num(data.damage, 1))
+	lines.append("Hasar: %s" % _num(data.damage))
 	var rate_label := "Dalga" if data.attack_mode == TowerData.AttackMode.PULSE else "Atış"
-	lines.append("%s: %s / sn" % [rate_label, String.num(data.fire_rate, 2)])
+	lines.append("%s: %s / sn" % [rate_label, _num(data.fire_rate)])
 	lines.append("Menzil: %d" % data.attack_range)
 	if data.splash_radius > 0.0:
 		lines.append("Patlama alanı: %d" % data.splash_radius)
 	if data.slow_factor > 0.0:
-		lines.append("Yavaşlatma: %%%d, %s sn" % [roundi(data.slow_factor * 100.0), String.num(data.slow_duration, 1)])
+		lines.append("Yavaşlatma: %%%d, %s sn" % [roundi(data.slow_factor * 100.0), _num(data.slow_duration)])
 	if data.armor_piercing > 0.0:
 		lines.append("Zırh delme: %%%d" % roundi(data.armor_piercing * 100.0))
 	return "\n".join(lines)
+
+
+## Tam sayıları ondalıksız, diğerlerini en fazla iki basamakla yazar: 110, 0.65, 1.2
+static func _num(value: float) -> String:
+	if is_equal_approx(value, roundf(value)):
+		return str(roundi(value))
+	return String.num(value, 2)

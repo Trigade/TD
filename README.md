@@ -89,8 +89,9 @@ scripts/       GDScript kodları
   towers/      Kule, mermi ve TowerData
   effects/     Patlama ve dalga halkası efekti
   waves/       Dalga tablosu (wave_table.gd) ve dalga yöneticisi
-  ui/          Arayüz, inşa menüsü (kule listesi build_menu.gd içinde) ve kule menüsü
+  ui/          Üst bar, dalga afişi, bildirimler, inşa ve kule menüleri, duraklatma/sonuç ekranı
 resources/
+  ui/          Carina teması (carina_theme.tres) — tüm panel ve butonların görünümü
   enemies/     Düşman değerleri (.tres) — denge ayarı buradan
   towers/      Kule değerleri (.tres)
 ```

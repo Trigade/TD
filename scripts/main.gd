@@ -108,18 +108,20 @@ func _close_menus() -> void:
 
 
 func _on_early_call_requested() -> void:
-	money += wave_manager.call_next_wave_early()
-	_refresh_hud()
+	var bonus := wave_manager.call_next_wave_early()
+	if bonus > 0:
+		money += bonus
+		hud.notify("+%d erken çağrı" % bonus)
+		_refresh_hud()
 
 
 func _on_countdown_changed(seconds_left: float) -> void:
-	hud.show_message("Dalga %d geliyor: %d" % [wave_manager.current_wave + 1, ceili(seconds_left)])
-	hud.show_early_call(wave_manager.early_call_bonus())
+	hud.show_countdown(wave_manager.current_wave + 1, seconds_left, wave_manager.early_call_bonus())
 
 
 func _on_wave_started(wave_number: int, total_waves: int) -> void:
-	hud.show_message("")
-	hud.hide_early_call()
+	hud.hide_countdown()
+	hud.announce_wave(wave_number, total_waves)
 	_refresh_hud()
 	print("Dalga %d/%d başladı" % [wave_number, total_waves])
 
@@ -127,6 +129,7 @@ func _on_wave_started(wave_number: int, total_waves: int) -> void:
 func _on_wave_cleared(wave_number: int) -> void:
 	var bonus := WAVE_BONUS_BASE + WAVE_BONUS_PER_WAVE * wave_number
 	money += bonus
+	hud.notify("+%d dalga bonusu" % bonus)
 	_refresh_hud()
 	print("Dalga %d bitti — can: %d, para: %d (+%d bonus)" % [wave_number, lives, money, bonus])
 
@@ -174,8 +177,7 @@ func _restart() -> void:
 ## Oyunu durdurur; düşmanlar ve dalgalar yerinde donar, sonuç ekranı üstte kalır.
 func _end_game() -> void:
 	_close_menus()
-	hud.show_message("")
-	hud.hide_early_call()
+	hud.hide_countdown()
 	get_tree().paused = true
 
 
