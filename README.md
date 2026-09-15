@@ -33,12 +33,38 @@ Değerler ilk tahminlerdir; denge ayarı `resources/towers/*.tres` dosyalarında
 
 ## Düşmanlar
 
-| Düşman | Özellik |
-|---|---|
-| Keşif Dronu | Normal hız, normal can |
-| Sürü | Kalabalık, hızlı, zayıf |
-| Zırhlı Kruvazör | Yavaş; zırh her vuruştan sabit hasar düşer |
-| Boss | Son dalga (isteğe bağlı) |
+| Düşman | Can | Hız | Zırh | Ödül | Can kaybı | Özellik |
+|---|---|---|---|---|---|---|
+| Keşif Dronu | 60 | 110 | 0 | 5 | 1 | Temel düşman |
+| Sürü | 25 | 170 | 0 | 3 | 1 | Kalabalık, hızlı, zayıf |
+| Zırhlı Kruvazör | 300 | 60 | 10 | 20 | 3 | Zırh her vuruştan sabit hasar düşer (en az 1 hasar geçer) |
+
+Tablodaki canlar 1. dalga değerleridir; düşman canı her dalgada %15 artar (12. dalgada 2.65 kat).
+
+## Ekonomi ve zorluk
+
+- Başlangıç: 20 can, 100 para
+- Gelir: öldürme ödülleri + her dalga sonunda **15 + 5 × dalga numarası** bonus
+- Can artışı `WaveManager.health_growth_per_wave`, bonus `main.gd` içindeki sabitlerden ayarlanır
+
+### Denge simülasyonu
+
+`tools/balance_sim.gd` oyunu farklı oyuncu stratejileriyle baştan sona oynar. Proje klasöründe:
+
+```
+godot --headless --fixed-fps 60 --quit-after 120000 --path . --script tools/balance_sim.gd -- karma
+```
+
+Güncel sonuçlar ve hedefler:
+
+| Strateji | Oynayış | Sonuç | Hedef |
+|---|---|---|---|
+| `hic` | Kule dikmez | 3. dalgada kayıp | Erken kaybetmeli |
+| `nova_yukselt` | Sadece Nova + yükseltme | 5. dalgada kayıp | Tek tip kule yetmemeli |
+| `plazma_yukselt` | Sadece Plazma + yükseltme | 8. dalgada kayıp | Tek tip kule yetmemeli |
+| `foton` | Sadece 1. seviye Foton | 9. dalgada kayıp | Orta dalgalarda kaybetmeli |
+| `foton_yukselt` | Sadece Foton + yükseltme | 11. dalgada kayıp | Son dalgalarda zorlanmalı |
+| `karma` | 4 kuleyi planlı kullanır | Zafer, 14 can | Biraz can kaybederek kazanmalı |
 
 ## Klasör yapısı
 

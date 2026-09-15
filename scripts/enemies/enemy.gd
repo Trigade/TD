@@ -12,6 +12,9 @@ const HEALTH_BAR_FILL := Color(0.4, 1.0, 0.5)
 const SLOW_RING_COLOR := Color(0.6, 0.5, 1.0, 0.8)
 
 var data: EnemyData
+## Dalga ilerledikçe düşmanları güçlendirmek için temel canı çarpar; sahneye eklenmeden önce ayarlanır.
+var health_multiplier := 1.0
+var max_health: float
 var health: float
 
 var _heading := 0.0
@@ -20,7 +23,8 @@ var _slow_time_left := 0.0
 
 
 func _ready() -> void:
-	health = data.max_health
+	max_health = data.max_health * health_multiplier
+	health = max_health
 	add_to_group("enemies")
 
 
@@ -75,8 +79,8 @@ func _draw() -> void:
 	if _slow_factor > 0.0:
 		draw_arc(Vector2.ZERO, data.radius + 7.0, 0.0, TAU, 32, SLOW_RING_COLOR, 2.0, true)
 
-	if health < data.max_health:
+	if health < max_health:
 		var origin := Vector2(-HEALTH_BAR_SIZE.x * 0.5, -data.radius - 14.0)
-		var fill := Vector2(HEALTH_BAR_SIZE.x * health / data.max_health, HEALTH_BAR_SIZE.y)
+		var fill := Vector2(HEALTH_BAR_SIZE.x * health / max_health, HEALTH_BAR_SIZE.y)
 		draw_rect(Rect2(origin, HEALTH_BAR_SIZE), HEALTH_BAR_BACK)
 		draw_rect(Rect2(origin, fill), HEALTH_BAR_FILL)

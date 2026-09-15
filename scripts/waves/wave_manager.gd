@@ -17,6 +17,8 @@ const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
 @export var path: Path2D
 @export var first_wave_delay := 5.0
 @export var break_between_waves := 8.0
+## Her dalgada düşman canına eklenen oran: 0.15 ile 2. dalga %115, 12. dalga %265 can.
+@export var health_growth_per_wave := 0.15
 
 ## 1'den başlar; 0 henüz hiçbir dalganın başlamadığı anlamına gelir.
 var current_wave := 0
@@ -81,6 +83,7 @@ func _finish_wave() -> void:
 func _spawn(data: EnemyData) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	enemy.data = data
+	enemy.health_multiplier = 1.0 + health_growth_per_wave * (current_wave - 1)
 	enemy.reached_end.connect(_on_enemy_reached_end)
 	enemy.died.connect(_on_enemy_died)
 	path.add_child(enemy)

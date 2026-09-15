@@ -4,6 +4,9 @@ extends Node2D
 
 const STARTING_LIVES := 20
 const STARTING_MONEY := 100
+## Dalga bitince verilen bonus: taban + dalga numarası × artış (1. dalga 20, 12. dalga 75).
+const WAVE_BONUS_BASE := 15
+const WAVE_BONUS_PER_WAVE := 5
 
 var lives := STARTING_LIVES
 var money := STARTING_MONEY
@@ -101,7 +104,10 @@ func _on_wave_started(wave_number: int, total_waves: int) -> void:
 
 
 func _on_wave_cleared(wave_number: int) -> void:
-	print("Dalga %d bitti — can: %d, para: %d" % [wave_number, lives, money])
+	var bonus := WAVE_BONUS_BASE + WAVE_BONUS_PER_WAVE * wave_number
+	money += bonus
+	_refresh_hud()
+	print("Dalga %d bitti — can: %d, para: %d (+%d bonus)" % [wave_number, lives, money, bonus])
 
 
 func _on_all_waves_cleared() -> void:
