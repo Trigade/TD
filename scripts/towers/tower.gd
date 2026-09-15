@@ -8,8 +8,12 @@ const PROJECTILE_SCENE := preload("res://scenes/towers/projectile.tscn")
 const BODY_RADIUS := 30.0
 const BARREL_LENGTH := 38.0
 const BODY_COLOR := Color(0.08, 0.12, 0.18)
+## Satışta geri verilen harcama oranı.
+const SELL_RATIO := 0.7
 
 var data: TowerData
+## İnşa ve yükseltmelere harcanan toplam para.
+var total_spent := 0
 var show_range := false:
 	set(value):
 		show_range = value
@@ -17,6 +21,16 @@ var show_range := false:
 
 var _cooldown := 0.0
 var _aim_angle := -PI / 2.0
+
+
+func upgrade() -> void:
+	data = data.next_level
+	total_spent += data.cost
+	queue_redraw()
+
+
+func sell_value() -> int:
+	return int(total_spent * SELL_RATIO)
 
 
 func _process(delta: float) -> void:
@@ -101,3 +115,8 @@ func _draw() -> void:
 		TowerData.AttackMode.PULSE:
 			draw_arc(Vector2.ZERO, 18.0, 0.0, TAU, 32, data.color, 3.0, true)
 			draw_circle(Vector2.ZERO, 8.0, data.color)
+
+	# Seviye göstergesi: gövdenin altında seviye kadar nokta.
+	for i in data.level:
+		var offset := (i - (data.level - 1) * 0.5) * 12.0
+		draw_circle(Vector2(offset, BODY_RADIUS + 12.0), 4.0, data.color)

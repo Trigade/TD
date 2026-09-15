@@ -11,10 +11,11 @@ const RADIUS := 42.0
 const COLOR := Color(0.55, 0.85, 1.0)
 
 var tower: Tower
-## İnşa menüsü bu nokta için açıkken vurgulanır.
+## Bu nokta için bir menü açıkken vurgulanır; kule varsa menzili gösterilir.
 var selected := false:
 	set(value):
 		selected = value
+		_update_tower_range()
 		queue_redraw()
 
 var _hovered := false
@@ -35,16 +36,27 @@ func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> vo
 func build(data: TowerData) -> void:
 	tower = TOWER_SCENE.instantiate()
 	tower.data = data
-	tower.show_range = _hovered
+	tower.total_spent = data.cost
 	add_child(tower)
+	_update_tower_range()
+	queue_redraw()
+
+
+func remove_tower() -> void:
+	tower.queue_free()
+	tower = null
 	queue_redraw()
 
 
 func _set_hovered(value: bool) -> void:
 	_hovered = value
-	if tower:
-		tower.show_range = value
+	_update_tower_range()
 	queue_redraw()
+
+
+func _update_tower_range() -> void:
+	if tower:
+		tower.show_range = _hovered or selected
 
 
 func _draw() -> void:

@@ -24,6 +24,11 @@ Godot 4.7 ile `project.godot` dosyasını aç ve **F5**'e bas.
 | Plazma Topu | Ağır hasar | 100 | 70 | 0.6 | 260 | Zırhı tamamen deler |
 | Nova Havanı | Alan hasarı | 120 | 30 | 0.7 | 240 | 90 px yarıçapta patlar |
 
+Tablo 1. seviye değerlerini gösterir. Her kulenin 3 seviyesi vardır; her seviye ayrı bir `.tres`
+dosyasıdır (`photon_turret.tres` → `photon_turret_2.tres` → `photon_turret_3.tres`) ve `next_level`
+alanıyla bir sonrakine bağlanır. Bir seviyenin `cost` değeri o seviyeye yükseltme fiyatıdır.
+Satışta toplam harcamanın %70'i geri verilir.
+
 Değerler ilk tahminlerdir; denge ayarı `resources/towers/*.tres` dosyalarından yapılır.
 
 ## Düşmanlar
@@ -47,8 +52,9 @@ scripts/       GDScript kodları
   map/         Arka plan, yol, kule noktası, istasyon
   enemies/     Düşman davranışı ve EnemyData
   towers/      Kule, mermi ve TowerData
+  effects/     Patlama ve dalga halkası efekti
   waves/       Dalga tablosu (wave_table.gd) ve dalga yöneticisi
-  ui/          Arayüz ve inşa menüsü (menüdeki kule listesi build_menu.gd içinde)
+  ui/          Arayüz, inşa menüsü (kule listesi build_menu.gd içinde) ve kule menüsü
 resources/
   enemies/     Düşman değerleri (.tres) — denge ayarı buradan
   towers/      Kule değerleri (.tres)

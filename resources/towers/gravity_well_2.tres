@@ -1,20 +1,20 @@
 [gd_resource type="Resource" script_class="TowerData" format=3]
 
 [ext_resource type="Script" path="res://scripts/towers/tower_data.gd" id="1_data"]
-[ext_resource type="Resource" path="res://resources/towers/gravity_well_2.tres" id="2_next"]
+[ext_resource type="Resource" path="res://resources/towers/gravity_well_3.tres" id="2_next"]
 
 [resource]
 script = ExtResource("1_data")
 display_name = "Yerçekimi Kuyusu"
 description = "Menzilindeki tüm düşmanları yavaşlatır ve az hasar verir."
-level = 1
-cost = 80
+level = 2
+cost = 70
 next_level = ExtResource("2_next")
 attack_mode = 1
-damage = 3.0
+damage = 5.0
 fire_rate = 1.5
-attack_range = 170.0
-slow_factor = 0.45
+attack_range = 185.0
+slow_factor = 0.55
 slow_duration = 1.0
 sides = 5
 color = Color(0.6, 0.5, 1, 1)

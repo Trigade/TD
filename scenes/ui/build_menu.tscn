@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/ui/build_menu.gd" id="1_menu"]
 
 [node name="BuildMenu" type="PanelContainer"]
+visible = false
 offset_right = 320.0
 offset_bottom = 120.0
 script = ExtResource("1_menu")

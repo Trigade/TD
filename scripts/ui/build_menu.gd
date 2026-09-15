@@ -1,19 +1,17 @@
 class_name BuildMenu
-extends PanelContainer
+extends SlotPopup
 
 ## Boş bir kule noktasına tıklanınca açılan inşa menüsü. Paranın yetmediği kuleler pasif görünür.
 
 signal tower_chosen(data: TowerData)
 
-## Menüde sunulan kuleler; yeni kule tipleri buraya eklenir.
+## Menüde sunulan kuleler (1. seviyeleri); yeni kule tipleri buraya eklenir.
 const TOWERS := [
 	preload("res://resources/towers/photon_turret.tres"),
 	preload("res://resources/towers/gravity_well.tres"),
 	preload("res://resources/towers/plasma_cannon.tres"),
 	preload("res://resources/towers/nova_mortar.tres"),
 ]
-## Menünün kule noktasına göre konumu.
-const OFFSET := Vector2(60, -50)
 
 var _buttons: Dictionary[TowerData, Button] = {}
 
@@ -21,7 +19,6 @@ var _buttons: Dictionary[TowerData, Button] = {}
 
 
 func _ready() -> void:
-	hide()
 	for data: TowerData in TOWERS:
 		var button := Button.new()
 		button.text = "%s — %d" % [data.display_name, data.cost]
@@ -35,15 +32,7 @@ func _ready() -> void:
 
 func open_at(slot_position: Vector2, money: int) -> void:
 	refresh(money)
-	show()
-	reset_size()
-	var screen := get_viewport_rect().size
-	var target := slot_position + OFFSET
-	# Sağa sığmıyorsa noktanın soluna aç.
-	if target.x + size.x > screen.x:
-		target.x = slot_position.x - OFFSET.x - size.x
-	target.y = clampf(target.y, 0.0, screen.y - size.y)
-	position = target
+	show_near(slot_position)
 
 
 func refresh(money: int) -> void:

@@ -12,7 +12,11 @@ enum AttackMode {
 
 @export var display_name := ""
 @export_multiline var description := ""
+@export var level := 1
+## İlk seviyede inşa fiyatı, sonraki seviyelerde bu seviyeye yükseltme fiyatı.
 @export var cost := 50
+## Yükseltince geçilecek seviye; boşsa bu en yüksek seviyedir.
+@export var next_level: TowerData
 @export var attack_mode := AttackMode.PROJECTILE
 @export var damage := 10.0
 ## Saniyedeki atış (veya dalga) sayısı.
@@ -36,3 +40,10 @@ enum AttackMode {
 @export_range(3, 12) var sides := 4
 @export var color := Color.WHITE
 @export var barrel_width := 8.0
+
+
+func max_level() -> int:
+	var last: TowerData = self
+	while last.next_level:
+		last = last.next_level
+	return last.level

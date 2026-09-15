@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/tower_menu.gd" id="1_menu"]
+
+[node name="TowerMenu" type="PanelContainer"]
+visible = false
+offset_right = 320.0
+offset_bottom = 240.0
+script = ExtResource("1_menu")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+
+[node name="Level" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="Stats" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.85, 0.9, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="Upgrade" type="Button" parent="Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+
+[node name="Sell" type="Button" parent="Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24

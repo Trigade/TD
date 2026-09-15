@@ -1,20 +1,18 @@
 [gd_resource type="Resource" script_class="TowerData" format=3]
 
 [ext_resource type="Script" path="res://scripts/towers/tower_data.gd" id="1_data"]
-[ext_resource type="Resource" path="res://resources/towers/plasma_cannon_2.tres" id="2_next"]
 
 [resource]
 script = ExtResource("1_data")
 display_name = "Plazma Topu"
 description = "Yavaş ama güçlü. Zırhı tamamen deler."
-level = 1
-cost = 100
-next_level = ExtResource("2_next")
-damage = 70.0
-fire_rate = 0.6
-attack_range = 260.0
-projectile_speed = 700.0
+level = 3
+cost = 150
+damage = 170.0
+fire_rate = 0.7
+attack_range = 290.0
+projectile_speed = 800.0
 armor_piercing = 1.0
 sides = 6
 color = Color(0.5, 1, 0.55, 1)
-barrel_width = 14.0
+barrel_width = 18.0
