@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/enemy_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+display_name = "Sürü"
+max_health = 25.0
+speed = 170.0
+armor = 0.0
+reward = 2
+lives_damage = 1
+radius = 10.0
+sides = 4
+color = Color(0.95, 0.35, 0.8, 1)

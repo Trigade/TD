@@ -38,6 +38,13 @@ Godot 4.7 ile `project.godot` dosyasını aç ve **F5**'e bas.
 ```
 scenes/        Sahneler (.tscn)
   map/         Harita parçaları (kule noktası vb.)
+  enemies/     Düşman sahnesi
+  ui/          Arayüz
 scripts/       GDScript kodları
   map/         Arka plan, yol, kule noktası, istasyon
+  enemies/     Düşman davranışı ve EnemyData
+  waves/       Dalga tablosu (wave_table.gd) ve dalga yöneticisi
+  ui/          Arayüz
+resources/
+  enemies/     Düşman değerleri (.tres) — denge ayarı buradan
 ```

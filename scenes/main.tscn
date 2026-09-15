@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://scripts/map/enemy_path.gd" id="3_path"]
 [ext_resource type="PackedScene" path="res://scenes/map/tower_slot.tscn" id="4_slot"]
 [ext_resource type="Script" path="res://scripts/map/station.gd" id="5_station"]
+[ext_resource type="Script" path="res://scripts/waves/wave_manager.gd" id="6_waves"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
 
 [sub_resource type="Curve2D" id="Curve2D_path"]
 _data = {
@@ -58,3 +60,9 @@ position = Vector2(1540, 900)
 [node name="Station" type="Node2D" parent="."]
 position = Vector2(1700, 760)
 script = ExtResource("5_station")
+
+[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("path")]
+script = ExtResource("6_waves")
+path = NodePath("../EnemyPath")
+
+[node name="Hud" parent="." instance=ExtResource("7_hud")]

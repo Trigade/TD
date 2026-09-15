@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/enemy_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+display_name = "Zırhlı Kruvazör"
+max_health = 300.0
+speed = 60.0
+armor = 6.0
+reward = 20
+lives_damage = 3
+radius = 26.0
+sides = 8
+color = Color(0.7, 0.65, 0.9, 1)
