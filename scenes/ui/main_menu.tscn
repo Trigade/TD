@@ -53,6 +53,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "Oyna"
 
+[node name="Options" type="Button" parent="Center/Content/Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "Seçenekler"
+
 [node name="Quit" type="Button" parent="Center/Content/Buttons"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 34

@@ -4,6 +4,7 @@ extends Node2D
 ## oyuncu durumunu (can, para) ve oyun akışını bir araya getirir.
 
 const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
+const OPTIONS_SCENE := preload("res://scenes/ui/options_menu.tscn")
 const LEVEL_SELECT_SCENE := "res://scenes/ui/level_select.tscn"
 ## Dalga bitince verilen bonus: taban + dalga numarası × artış (1. dalga 20, 13. dalga 80).
 const WAVE_BONUS_BASE := 15
@@ -51,6 +52,7 @@ func _ready() -> void:
 	hud.speed_toggled.connect(_on_speed_toggled)
 	overlay.resume_requested.connect(_resume)
 	overlay.restart_requested.connect(_restart)
+	overlay.options_requested.connect(_open_options)
 	overlay.main_menu_requested.connect(_to_level_select)
 	overlay.quit_requested.connect(get_tree().quit)
 
@@ -216,6 +218,11 @@ func _resume() -> void:
 func _restart() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+
+## Duraklatma ekranının üstünde ayarları açar.
+func _open_options() -> void:
+	add_child(OPTIONS_SCENE.instantiate())
 
 
 ## Bölüm seçme ekranına döner.

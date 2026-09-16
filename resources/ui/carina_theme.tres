@@ -113,8 +113,34 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider"]
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.09, 0.12, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.78, 0.92, 0.35)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_fill"]
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.35, 0.78, 0.92, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font_size = 24
+HSlider/styles/slider = SubResource("StyleBoxFlat_slider")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fill")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_progress_background")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_progress_fill")
 Button/colors/font_color = Color(0.88, 0.93, 1, 1)

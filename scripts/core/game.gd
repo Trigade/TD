@@ -14,6 +14,9 @@ const DIFFICULTIES := [
 ]
 
 const SAVE_PATH := "user://progress.cfg"
+const SETTINGS_PATH := "user://settings.cfg"
+## Ayar adı -> ses yolu (bus) adı
+const BUSES := {"master": "Master", "music": "Music", "sfx": "SFX"}
 ## Kalan canın bu oranı ve üstü 3 yıldız, TWO_STAR_RATIO ve üstü 2 yıldız, kazanmak 1 yıldız.
 const THREE_STAR_RATIO := 0.9
 const TWO_STAR_RATIO := 0.5
@@ -22,6 +25,11 @@ var level: LevelData = LEVELS[0]
 var difficulty: DifficultyData = DIFFICULTIES[1]
 ## Testlerin gerçek kaydı bozmaması için değiştirilebilir.
 var save_path := SAVE_PATH
+var settings_path := SETTINGS_PATH
+
+## Ses seviyeleri (0-1) ve tam ekran tercihi.
+var volumes := {"master": 0.8, "music": 0.7, "sfx": 0.9}
+var fullscreen := false
 
 ## "bölüm_id/zorluk_id" -> yıldız sayısı
 var _stars := {}
@@ -29,6 +37,8 @@ var _stars := {}
 
 func _ready() -> void:
 	load_progress()
+	load_settings()
+	apply_settings()
 
 
 func stars_for(level_id: String, difficulty_id: String) -> int:
@@ -91,3 +101,55 @@ func save_progress() -> void:
 func reset_progress() -> void:
 	_stars.clear()
 	save_progress()
+
+
+func set_volume(kind: String, value: float) -> void:
+	volumes[kind] = clampf(value, 0.0, 1.0)
+	_apply_volume(kind)
+	save_settings()
+
+
+func set_fullscreen(enabled: bool) -> void:
+	fullscreen = enabled
+	_apply_fullscreen()
+	save_settings()
+
+
+## Kayıtlı ayarları ses yollarına ve pencereye uygular.
+func apply_settings() -> void:
+	for kind in volumes:
+		_apply_volume(kind)
+	_apply_fullscreen()
+
+
+func load_settings() -> void:
+	var config := ConfigFile.new()
+	if config.load(settings_path) != OK:
+		return
+	for kind in volumes:
+		volumes[kind] = float(config.get_value("ses", kind, volumes[kind]))
+	fullscreen = bool(config.get_value("goruntu", "tam_ekran", fullscreen))
+
+
+func save_settings() -> void:
+	var config := ConfigFile.new()
+	for kind in volumes:
+		config.set_value("ses", kind, volumes[kind])
+	config.set_value("goruntu", "tam_ekran", fullscreen)
+	config.save(settings_path)
+
+
+func _apply_volume(kind: String) -> void:
+	var index := AudioServer.get_bus_index(BUSES[kind])
+	if index < 0:
+		return
+	var value: float = volumes[kind]
+	AudioServer.set_bus_mute(index, is_zero_approx(value))
+	AudioServer.set_bus_volume_db(index, linear_to_db(maxf(value, 0.001)))
+
+
+func _apply_fullscreen() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if fullscreen else DisplayServer.WINDOW_MODE_WINDOWED
+	DisplayServer.window_set_mode(mode)

@@ -27,6 +27,12 @@ geri sayımla gelir ve erken çağrılabilir. Duraklatma ve sonuç ekranlarında
 
 2. bölüm, 1. bölümden en az 1 yıldız alınınca açılır.
 
+### Seçenekler
+
+Ana menüden ve duraklatma ekranından açılır. Ana ses, müzik ve efekt seviyeleri ile tam ekran
+ayarı `user://settings.cfg` dosyasına kaydedilir ve açılışta uygulanır. Sesler `default_bus_layout.tres`
+içindeki **Master / Music / SFX** yollarına bağlanır; ses dosyaları eklendiğinde ayarlar hazır olacak.
+
 ### Yıldızlar
 
 Kalan canın oranına göre: %90 ve üstü 3 yıldız, %50 ve üstü 2 yıldız, kazanmak 1 yıldız.
@@ -38,7 +44,7 @@ Oyun sadece sol tık ve ESC ile oynanır (MacBook trackpad dostu).
 
 - **Sol tık:** Boş kule noktasına tıkla → kule inşa et. Kurulu kuleye tıkla → yükselt veya sat.
 - **ESC:** Açık menüyü kapatır; menü yoksa oyunu duraklatır; duraklatma ekranında oyuna döner.
-- **Duraklat** (sağ üst): ESC ile aynı duraklatma ekranı.
+- **Duraklat** (sağ üst): ESC ile aynı duraklatma ekranı; oradan **Seçenekler** açılabilir.
 - **2x** (sağ üst): Basılıyken oyun iki kat hızlı akar.
 - **Dalgayı başlat** (sağ üst): Oyun açıldığında ilk dalga beklemededir; kuleleri kurduktan sonra bu butonla başlatırsın.
 - **Dalgayı çağır** (sağ üst, geri sayım sırasında): Sıradaki dalgayı hemen başlatır, kalan her saniye için +3 para verir.

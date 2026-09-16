@@ -5,6 +5,7 @@ extends CanvasLayer
 
 signal resume_requested
 signal restart_requested
+signal options_requested
 signal main_menu_requested
 signal quit_requested
 
@@ -13,6 +14,7 @@ signal quit_requested
 @onready var _stars: StarRow = $Center/Panel/Margin/Content/Stars
 @onready var _resume: Button = $Center/Panel/Margin/Content/Resume
 @onready var _restart: Button = $Center/Panel/Margin/Content/Restart
+@onready var _options: Button = $Center/Panel/Margin/Content/Options
 @onready var _main_menu: Button = $Center/Panel/Margin/Content/MainMenu
 @onready var _quit: Button = $Center/Panel/Margin/Content/Quit
 
@@ -20,6 +22,7 @@ signal quit_requested
 func _ready() -> void:
 	_resume.pressed.connect(resume_requested.emit)
 	_restart.pressed.connect(restart_requested.emit)
+	_options.pressed.connect(options_requested.emit)
 	_main_menu.pressed.connect(main_menu_requested.emit)
 	_quit.pressed.connect(quit_requested.emit)
 

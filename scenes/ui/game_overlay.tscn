@@ -66,6 +66,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Yeniden başlat"
 
+[node name="Options" type="Button" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Seçenekler"
+
 [node name="MainMenu" type="Button" parent="Center/Panel/Margin/Content"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
