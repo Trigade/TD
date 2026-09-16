@@ -4,7 +4,8 @@ extends Node2D
 
 const STARTING_LIVES := 20
 const STARTING_MONEY := 100
-## Dalga bitince verilen bonus: taban + dalga numarası × artış (1. dalga 20, 12. dalga 75).
+const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
+## Dalga bitince verilen bonus: taban + dalga numarası × artış (1. dalga 20, 13. dalga 80).
 const WAVE_BONUS_BASE := 15
 const WAVE_BONUS_PER_WAVE := 5
 ## 2x butonuna basılıyken oyunun akış hızı.
@@ -33,6 +34,7 @@ func _ready() -> void:
 	hud.speed_toggled.connect(_on_speed_toggled)
 	overlay.resume_requested.connect(_resume)
 	overlay.restart_requested.connect(_restart)
+	overlay.main_menu_requested.connect(_to_main_menu)
 	overlay.quit_requested.connect(get_tree().quit)
 
 	wave_manager.countdown_changed.connect(_on_countdown_changed)
@@ -43,6 +45,8 @@ func _ready() -> void:
 	wave_manager.enemy_killed.connect(_on_enemy_killed)
 	wave_manager.boss_spawned.connect(hud.show_boss)
 	_refresh_hud()
+	if wave_manager.is_idle():
+		hud.show_start_prompt()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -121,6 +125,10 @@ func _on_speed_toggled(fast: bool) -> void:
 
 
 func _on_early_call_requested() -> void:
+	# İlk dalga oyuncunun başlatmasını bekler; sonrakiler geri sayımla gelir ve erkene alınabilir.
+	if wave_manager.is_idle():
+		wave_manager.start()
+		return
 	var bonus := wave_manager.call_next_wave_early()
 	if bonus > 0:
 		money += bonus
@@ -188,6 +196,12 @@ func _resume() -> void:
 func _restart() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+
+## Ana menüye döner.
+func _to_main_menu() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
 
 
 ## Oyunu durdurur; düşmanlar ve dalgalar yerinde donar, sonuç ekranı üstte kalır.

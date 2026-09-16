@@ -125,3 +125,10 @@ func _flash_lives() -> void:
 	_lives.modulate = LIFE_LOST_COLOR
 	_lives_tween = create_tween()
 	_lives_tween.tween_property(_lives, "modulate", Color.WHITE, 0.6)
+
+
+## Oyun başlamadan önce oyuncuyu bekleyen istem.
+func show_start_prompt() -> void:
+	_set_banner("İstasyon hazır · dalgayı sen başlat")
+	_early_call.text = "Dalgayı başlat"
+	_early_call.show()

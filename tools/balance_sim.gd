@@ -41,6 +41,7 @@ func _initialize() -> void:
 	main.wave_manager.all_waves_cleared.connect(_finish.bind("ZAFER"))
 	main.wave_manager.boss_spawned.connect(_on_boss_spawned)
 	main.wave_manager.enemy_reached_end.connect(_on_enemy_leaked)
+	main.wave_manager.start()
 
 	while not done:
 		await process_frame

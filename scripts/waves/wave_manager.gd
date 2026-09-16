@@ -11,7 +11,7 @@ signal enemy_reached_end(enemy: Enemy)
 signal enemy_killed(enemy: Enemy)
 signal boss_spawned(enemy: Enemy)
 
-enum State { COUNTDOWN, RUNNING, FINISHED }
+enum State { IDLE, COUNTDOWN, RUNNING, FINISHED }
 
 const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
 ## Bölünen düşmandan çıkanların yol üzerindeki aralığı (piksel).
@@ -24,11 +24,13 @@ const SPLIT_SPACING := 14.0
 @export var health_growth_per_wave := 0.16
 ## Geri sayım sırasında dalga erken çağrılınca kalan her saniye için verilen para.
 @export var early_call_bonus_per_second := 3
+## Açıkken ilk dalga kendiliğinden başlar; kapalıyken oyuncunun start() demesini bekler.
+@export var auto_start := false
 
 ## 1'den başlar; 0 henüz hiçbir dalganın başlamadığı anlamına gelir.
 var current_wave := 0
 
-var _state := State.COUNTDOWN
+var _state := State.IDLE
 var _countdown := 0.0
 var _wave_time := 0.0
 ## Bu dalgada henüz çıkmamış düşmanlar, çıkış zamanına göre sıralı: {"time": float, "enemy": EnemyData}
@@ -37,7 +39,8 @@ var _alive := 0
 
 
 func _ready() -> void:
-	_start_countdown(first_wave_delay)
+	if auto_start:
+		_start_countdown(first_wave_delay)
 
 
 func _process(delta: float) -> void:
@@ -144,3 +147,13 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	if enemy.data.split_into:
 		for i in enemy.data.split_count:
 			_spawn(enemy.data.split_into, enemy.health_multiplier, maxf(enemy.progress - i * SPLIT_SPACING, 0.0))
+
+
+## Oyuncu hazır olduğunda ilk dalgayı başlatır.
+func start() -> void:
+	if _state == State.IDLE:
+		_start_next_wave()
+
+
+func is_idle() -> bool:
+	return _state == State.IDLE

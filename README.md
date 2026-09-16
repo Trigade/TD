@@ -6,6 +6,13 @@ Eta Carinae yörüngesindeki araştırma istasyonunu, Carina Nebulası'ndan gele
 
 Godot 4.7 ile `project.godot` dosyasını aç ve **F5**'e bas.
 
+## Oyun akışı
+
+Oyun ana menüyle (`scenes/ui/main_menu.tscn`) açılır. **Oyna** haritayı yükler ama dalgalar
+kendiliğinden gelmez: oyuncu **Dalgayı başlat** diyene kadar beklenir. İlk dalga başladıktan sonra
+sonraki dalgalar aralarda geri sayımla gelir ve erken çağrılabilir. Duraklatma ve sonuç ekranlarından
+**Ana menü** ile menüye dönülür.
+
 ## Kontroller
 
 Oyun sadece sol tık ve ESC ile oynanır (MacBook trackpad dostu).
@@ -14,6 +21,7 @@ Oyun sadece sol tık ve ESC ile oynanır (MacBook trackpad dostu).
 - **ESC:** Açık menüyü kapatır; menü yoksa oyunu duraklatır; duraklatma ekranında oyuna döner.
 - **Duraklat** (sağ üst): ESC ile aynı duraklatma ekranı.
 - **2x** (sağ üst): Basılıyken oyun iki kat hızlı akar.
+- **Dalgayı başlat** (sağ üst): Oyun açıldığında ilk dalga beklemededir; kuleleri kurduktan sonra bu butonla başlatırsın.
 - **Dalgayı çağır** (sağ üst, geri sayım sırasında): Sıradaki dalgayı hemen başlatır, kalan her saniye için +3 para verir.
 
 ## İlk sürüm (MVP) kapsamı
