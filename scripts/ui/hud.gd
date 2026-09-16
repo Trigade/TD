@@ -33,6 +33,7 @@ var _boss: Enemy
 @onready var _pause_button: Button = $PauseButton
 @onready var _speed_button: Button = $SpeedButton
 @onready var _early_call: Button = $EarlyCallButton
+@onready var _level_label: Label = $LevelLabel
 
 
 func _ready() -> void:
@@ -132,3 +133,8 @@ func show_start_prompt() -> void:
 	_set_banner("İstasyon hazır · dalgayı sen başlat")
 	_early_call.text = "Dalgayı başlat"
 	_early_call.show()
+
+
+## Sol altta hangi bölüm ve zorlukta oynandığını gösterir.
+func set_level_name(text: String) -> void:
+	_level_label.text = text

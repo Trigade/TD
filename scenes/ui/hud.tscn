@@ -199,6 +199,20 @@ theme_override_colors/font_color = Color(1, 0.85, 0.5, 1)
 theme_override_font_sizes/font_size = 26
 text = "Dalgayı çağır"
 
+[node name="LevelLabel" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -56.0
+offset_right = 760.0
+offset_bottom = -16.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+
 [node name="BuildMenu" parent="." instance=ExtResource("2_build_menu")]
 
 [node name="TowerMenu" parent="." instance=ExtResource("3_tower_menu")]

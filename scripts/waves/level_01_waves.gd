@@ -1,4 +1,4 @@
-class_name WaveTable
+# Bölüm 1 dalga tablosu. LevelData.waves_script üzerinden okunur.
 extends RefCounted
 
 ## Bölüm 1'in dalgaları. Her dalga bir grup listesidir; gruplar aynı dalga içinde üst üste binebilir.

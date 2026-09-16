@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/map/space_background.gd" id="1_bg"]
+[ext_resource type="Script" path="res://scripts/map/enemy_path.gd" id="2_path"]
+[ext_resource type="PackedScene" path="res://scenes/map/tower_slot.tscn" id="3_slot"]
+[ext_resource type="Script" path="res://scripts/map/station.gd" id="4_station"]
+
+[sub_resource type="Curve2D" id="Curve2D_path"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -60, 860, 0, 0, 0, 0, 400, 860, 0, 0, 0, 0, 400, 260, 0, 0, 0, 0, 880, 260, 0, 0, 0, 0, 880, 760, 0, 0, 0, 0, 1360, 760, 0, 0, 0, 0, 1360, 460, 0, 0, 0, 0, 1680, 460),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 8
+
+[node name="Level02" type="Node2D"]
+
+[node name="SpaceBackground" type="Node2D" parent="."]
+script = ExtResource("1_bg")
+
+[node name="EnemyPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_path")
+script = ExtResource("2_path")
+
+[node name="TowerSlots" type="Node2D" parent="."]
+
+[node name="Slot01" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(260, 700)
+
+[node name="Slot02" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(540, 560)
+
+[node name="Slot03" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(250, 400)
+
+[node name="Slot04" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(640, 400)
+
+[node name="Slot05" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(590, 140)
+
+[node name="Slot06" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(1020, 520)
+
+[node name="Slot07" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(1120, 900)
+
+[node name="Slot08" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(1220, 600)
+
+[node name="Slot09" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(1500, 620)
+
+[node name="Slot10" parent="TowerSlots" instance=ExtResource("3_slot")]
+position = Vector2(1520, 320)
+
+[node name="Station" type="Node2D" parent="."]
+position = Vector2(1680, 460)
+script = ExtResource("4_station")

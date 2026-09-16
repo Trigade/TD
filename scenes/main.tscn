@@ -1,71 +1,18 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/map/space_background.gd" id="2_bg"]
-[ext_resource type="Script" path="res://scripts/map/enemy_path.gd" id="3_path"]
-[ext_resource type="PackedScene" path="res://scenes/map/tower_slot.tscn" id="4_slot"]
-[ext_resource type="Script" path="res://scripts/map/station.gd" id="5_station"]
-[ext_resource type="Script" path="res://scripts/waves/wave_manager.gd" id="6_waves"]
-[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
-[ext_resource type="PackedScene" path="res://scenes/ui/game_overlay.tscn" id="8_overlay"]
-
-[sub_resource type="Curve2D" id="Curve2D_path"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -60, 200, 0, 0, 0, 0, 380, 200, 0, 0, 0, 0, 380, 780, 0, 0, 0, 0, 860, 780, 0, 0, 0, 0, 860, 300, 0, 0, 0, 0, 1340, 300, 0, 0, 0, 0, 1340, 760, 0, 0, 0, 0, 1700, 760),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
-}
-point_count = 8
+[ext_resource type="Script" path="res://scripts/waves/wave_manager.gd" id="2_waves"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_overlay.tscn" id="4_overlay"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
-[node name="SpaceBackground" type="Node2D" parent="."]
-script = ExtResource("2_bg")
+[node name="Map" type="Node2D" parent="."]
 
-[node name="EnemyPath" type="Path2D" parent="."]
-curve = SubResource("Curve2D_path")
-script = ExtResource("3_path")
+[node name="WaveManager" type="Node" parent="."]
+script = ExtResource("2_waves")
 
-[node name="TowerSlots" type="Node2D" parent="."]
+[node name="Hud" parent="." instance=ExtResource("3_hud")]
 
-[node name="Slot01" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(230, 330)
-
-[node name="Slot02" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(520, 480)
-
-[node name="Slot03" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(250, 640)
-
-[node name="Slot04" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(620, 650)
-
-[node name="Slot05" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(720, 400)
-
-[node name="Slot06" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(1000, 520)
-
-[node name="Slot07" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(1100, 180)
-
-[node name="Slot08" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(1200, 430)
-
-[node name="Slot09" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(1480, 560)
-
-[node name="Slot10" parent="TowerSlots" instance=ExtResource("4_slot")]
-position = Vector2(1540, 900)
-
-[node name="Station" type="Node2D" parent="."]
-position = Vector2(1700, 760)
-script = ExtResource("5_station")
-
-[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("path")]
-script = ExtResource("6_waves")
-path = NodePath("../EnemyPath")
-
-[node name="Hud" parent="." instance=ExtResource("7_hud")]
-
-[node name="GameOverlay" parent="." instance=ExtResource("8_overlay")]
+[node name="GameOverlay" parent="." instance=ExtResource("4_overlay")]

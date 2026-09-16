@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DifficultyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/difficulty_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = "normal"
+display_name = "Normal"
+description = "20 can, 100 para. Oyunun tasarlandığı denge."
+starting_lives = 20
+starting_money = 100
+health_multiplier = 1.0

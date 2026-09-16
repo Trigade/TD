@@ -2,7 +2,7 @@ extends Control
 
 ## Oyun açılınca gelen ana menü.
 
-const GAME_SCENE := "res://scenes/main.tscn"
+const LEVEL_SELECT := "res://scenes/ui/level_select.tscn"
 
 @onready var _play: Button = $Center/Content/Buttons/Play
 @onready var _quit: Button = $Center/Content/Buttons/Quit
@@ -15,4 +15,4 @@ func _ready() -> void:
 
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file(GAME_SCENE)
+	get_tree().change_scene_to_file(LEVEL_SELECT)

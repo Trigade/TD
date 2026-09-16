@@ -8,10 +8,29 @@ Godot 4.7 ile `project.godot` dosyasını aç ve **F5**'e bas.
 
 ## Oyun akışı
 
-Oyun ana menüyle (`scenes/ui/main_menu.tscn`) açılır. **Oyna** haritayı yükler ama dalgalar
-kendiliğinden gelmez: oyuncu **Dalgayı başlat** diyene kadar beklenir. İlk dalga başladıktan sonra
-sonraki dalgalar aralarda geri sayımla gelir ve erken çağrılabilir. Duraklatma ve sonuç ekranlarından
-**Ana menü** ile menüye dönülür.
+Ana menü → **Oyna** → bölüm seç → zorluk seç → oyun. Harita açılınca dalgalar beklemededir:
+oyuncu **Dalgayı başlat** diyene kadar düşman gelmez. İlk dalgadan sonra sonraki dalgalar aralarda
+geri sayımla gelir ve erken çağrılabilir. Duraklatma ve sonuç ekranlarından **Bölüm seç** ile geri dönülür.
+
+### Bölümler ve zorluk
+
+| Bölüm | Harita | Başlangıç parası |
+|---|---|---|
+| 1. Bölüm — Eta Yörüngesi | 3280 px yol, 10 kule noktası | zorluğun parası |
+| 2. Bölüm — Nebula Geçidi | 3140 px yol, farklı kıvrımlar; zırhlılar erken gelir | zorluğun parası + 100 |
+
+| Zorluk | Can | Para | Düşman canı |
+|---|---|---|---|
+| Kolay | 30 | 150 | ×0.8 |
+| Normal | 20 | 100 | ×1.0 |
+| Zor | 18 | 100 | ×1.1 |
+
+2. bölüm, 1. bölümden en az 1 yıldız alınınca açılır.
+
+### Yıldızlar
+
+Kalan canın oranına göre: %90 ve üstü 3 yıldız, %50 ve üstü 2 yıldız, kazanmak 1 yıldız.
+Her bölüm-zorluk çifti için en iyi sonuç `user://progress.cfg` dosyasına kaydedilir.
 
 ## Kontroller
 
@@ -76,36 +95,44 @@ Oyun 13 dalgadır; 13. dalga Eta Canavarı ve eskortlarından oluşan **boss dal
 godot --headless --fixed-fps 60 --quit-after 120000 --path . --script tools/balance_sim.gd -- karma
 ```
 
-Güncel sonuçlar ve hedefler:
+Stratejiden sonra geçici ayar verilebilir:
+`level=2 difficulty=zor boss_hp=1800 growth=0.16 lives=18 money_bonus=100`.
+Kule noktaları yolu kapsama oranına göre sıralandığı için aynı plan her haritada çalışır.
 
-| Strateji | Oynayış | Sonuç | Hedef |
-|---|---|---|---|
-| `hic` | Kule dikmez | 3. dalgada kayıp | Erken kaybetmeli |
-| `nova_yukselt` | Sadece Nova + yükseltme | 5. dalgada kayıp | Tek tip kule yetmemeli |
-| `plazma_yukselt` | Sadece Plazma + yükseltme | 8. dalgada kayıp | Tek tip kule yetmemeli |
-| `foton` | Sadece 1. seviye Foton | 9. dalgada kayıp | Orta dalgalarda kaybetmeli |
-| `foton_yukselt` | Sadece Foton + yükseltme | 11. dalgada kayıp | Son dalgalarda zorlanmalı |
-| `karma` | 4 kuleyi planlı kullanır | Zafer, 20 can (boss 5840 canla gelir ve ölür) | Kazanmalı |
+Güncel sonuçlar (kalan can / kaybedilen dalga):
 
-Simülasyon sonunda boss'un kalan canını ve istasyona sızan düşmanları da yazar.
-Boss canı 6700 civarına çıkınca `karma` planı boss'u yetiştiremiyor; 2000 temel can bu sınırın ~%12 altındadır.
+| Strateji | Bölüm 1 Kolay | Bölüm 1 Normal | Bölüm 1 Zor | Bölüm 2 Normal | Bölüm 2 Zor |
+|---|---|---|---|---|---|
+| `hic` (kulesiz) | — | 3. dalga | — | 2. dalga | — |
+| `nova_yukselt` (tek tip) | — | 7. dalga | — | — | — |
+| `foton_yukselt` (tek tip) | — | 11. dalga | — | 12. dalga | — |
+| `karma` (önce Foton) | 30 can | 17 can | 10. dalga | 2 can | 8. dalga |
+| `karma_plazma` (erken Plazma) | 30 can | 17 can | 5 can | 19 can | 17 can |
+
+Hedef tutmuş sayılır: tek tip kule hiçbir bölümü bitiremiyor, Normal iyi oyunla kazanılıyor,
+Zor ise ancak zırhlılara erken hazırlanan planla geçiliyor.
+Simülasyon sonunda boss.un kalan canını ve istasyona sızan düşmanları da yazar.
 
 ## Klasör yapısı
 
 ```
 scenes/        Sahneler (.tscn)
+  levels/      Bölüm haritaları (yol, kule noktaları, istasyon)
   map/         Harita parçaları (kule noktası vb.)
   enemies/     Düşman sahnesi
   towers/      Kule ve mermi sahneleri
   ui/          Arayüz ve inşa menüsü
 scripts/       GDScript kodları
+  core/        Game singleton.ı, LevelData ve DifficultyData
   map/         Arka plan, yol, kule noktası, istasyon
   enemies/     Düşman davranışı ve EnemyData
   towers/      Kule, mermi ve TowerData
   effects/     Patlama ve dalga halkası efekti
-  waves/       Dalga tablosu (wave_table.gd) ve dalga yöneticisi
+  waves/       Bölüm dalga tabloları (level_01_waves.gd, level_02_waves.gd) ve dalga yöneticisi
   ui/          Üst bar, dalga afişi, bildirimler, inşa ve kule menüleri, duraklatma/sonuç ekranı
 resources/
+  levels/      Bölüm tanımları (.tres)
+  difficulties/ Zorluk tanımları (.tres)
   ui/          Carina teması (carina_theme.tres) — tüm panel ve butonların görünümü
   enemies/     Düşman değerleri (.tres) — denge ayarı buradan
   towers/      Kule değerleri (.tres)

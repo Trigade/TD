@@ -26,6 +26,11 @@ const SPLIT_SPACING := 14.0
 @export var early_call_bonus_per_second := 3
 ## Açıkken ilk dalga kendiliğinden başlar; kapalıyken oyuncunun start() demesini bekler.
 @export var auto_start := false
+## Zorluk seviyesinin düşman canı çarpanı.
+@export var health_multiplier := 1.0
+
+## Bu bölümün dalga tablosu; ana sahne LevelData'dan doldurur.
+var waves: Array = []
 
 ## 1'den başlar; 0 henüz hiçbir dalganın başlamadığı anlamına gelir.
 var current_wave := 0
@@ -59,13 +64,13 @@ func _process(delta: float) -> void:
 
 
 func total_waves() -> int:
-	return WaveTable.WAVES.size()
+	return waves.size()
 
 
 func is_boss_wave(wave_number: int) -> bool:
 	if wave_number < 1 or wave_number > total_waves():
 		return false
-	for group in WaveTable.WAVES[wave_number - 1]:
+	for group in waves[wave_number - 1]:
 		if group.enemy.is_boss:
 			return true
 	return false
@@ -101,7 +106,7 @@ func _start_countdown(seconds: float) -> void:
 func _start_next_wave() -> void:
 	current_wave += 1
 	_wave_time = 0.0
-	for group in WaveTable.WAVES[current_wave - 1]:
+	for group in waves[current_wave - 1]:
 		for i in group.count:
 			_pending.append({"time": group.delay + i * group.interval, "enemy": group.enemy})
 	_pending.sort_custom(func(a, b): return a.time < b.time)
@@ -119,13 +124,13 @@ func _finish_wave() -> void:
 
 
 func _wave_health_multiplier() -> float:
-	return 1.0 + health_growth_per_wave * (current_wave - 1)
+	return (1.0 + health_growth_per_wave * (current_wave - 1)) * health_multiplier
 
 
-func _spawn(data: EnemyData, health_multiplier: float, at_progress := 0.0) -> void:
+func _spawn(data: EnemyData, enemy_health_multiplier: float, at_progress := 0.0) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	enemy.data = data
-	enemy.health_multiplier = health_multiplier
+	enemy.health_multiplier = enemy_health_multiplier
 	enemy.reached_end.connect(_on_enemy_reached_end)
 	enemy.died.connect(_on_enemy_died)
 	path.add_child(enemy)

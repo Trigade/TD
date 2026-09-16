@@ -1,29 +1,46 @@
 extends Node2D
 
-## Ana sahne: haritayı, dalgaları, kule inşasını, oyuncu durumunu (can, para) ve oyun akışını bir araya getirir.
+## Oyun sahnesi: seçili bölümün haritasını yükler, dalgaları, kule inşasını,
+## oyuncu durumunu (can, para) ve oyun akışını bir araya getirir.
 
-const STARTING_LIVES := 20
-const STARTING_MONEY := 100
 const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
+const LEVEL_SELECT_SCENE := "res://scenes/ui/level_select.tscn"
 ## Dalga bitince verilen bonus: taban + dalga numarası × artış (1. dalga 20, 13. dalga 80).
 const WAVE_BONUS_BASE := 15
 const WAVE_BONUS_PER_WAVE := 5
 ## 2x butonuna basılıyken oyunun akış hızı.
 const FAST_SPEED := 2.0
 
-var lives := STARTING_LIVES
-var money := STARTING_MONEY
+var level: LevelData
+var difficulty: DifficultyData
+var lives := 20
+var money := 100
+
+## Bu bölümün kule noktaları; harita yüklenince doldurulur.
+var tower_slots: Node2D
 
 ## Menüsü açık olan kule noktası.
 var _selected_slot: TowerSlot
 
-@onready var tower_slots: Node2D = $TowerSlots
+@onready var map_root: Node2D = $Map
 @onready var wave_manager: WaveManager = $WaveManager
 @onready var hud: Hud = $Hud
 @onready var overlay: GameOverlay = $GameOverlay
 
 
 func _ready() -> void:
+	level = Game.level
+	difficulty = Game.difficulty
+	lives = difficulty.starting_lives
+	money = difficulty.starting_money + level.starting_money_bonus
+
+	var map: Node2D = level.map_scene.instantiate()
+	map_root.add_child(map)
+	tower_slots = map.get_node("TowerSlots")
+	wave_manager.path = map.get_node("EnemyPath")
+	wave_manager.waves = level.waves()
+	wave_manager.health_multiplier = difficulty.health_multiplier
+
 	for slot: TowerSlot in tower_slots.get_children():
 		slot.clicked.connect(_on_slot_clicked)
 	hud.build_menu.tower_chosen.connect(_on_tower_chosen)
@@ -34,7 +51,7 @@ func _ready() -> void:
 	hud.speed_toggled.connect(_on_speed_toggled)
 	overlay.resume_requested.connect(_resume)
 	overlay.restart_requested.connect(_restart)
-	overlay.main_menu_requested.connect(_to_main_menu)
+	overlay.main_menu_requested.connect(_to_level_select)
 	overlay.quit_requested.connect(get_tree().quit)
 
 	wave_manager.countdown_changed.connect(_on_countdown_changed)
@@ -44,6 +61,7 @@ func _ready() -> void:
 	wave_manager.enemy_reached_end.connect(_on_enemy_reached_end)
 	wave_manager.enemy_killed.connect(_on_enemy_killed)
 	wave_manager.boss_spawned.connect(hud.show_boss)
+	hud.set_level_name("%s · %s" % [level.display_name, difficulty.display_name])
 	_refresh_hud()
 	if wave_manager.is_idle():
 		hud.show_start_prompt()
@@ -159,9 +177,11 @@ func _on_wave_cleared(wave_number: int) -> void:
 
 
 func _on_all_waves_cleared() -> void:
+	var stars := Game.rate(lives, difficulty.starting_lives)
+	Game.record_result(level.id, difficulty.id, stars)
 	_end_game()
-	overlay.show_victory(lives)
-	print("Zafer!")
+	overlay.show_victory(lives, stars)
+	print("Zafer! — %d yıldız" % stars)
 
 
 func _on_enemy_reached_end(enemy: Enemy) -> void:
@@ -198,10 +218,10 @@ func _restart() -> void:
 	get_tree().reload_current_scene()
 
 
-## Ana menüye döner.
-func _to_main_menu() -> void:
+## Bölüm seçme ekranına döner.
+func _to_level_select() -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
+	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
 
 
 ## Oyunu durdurur; düşmanlar ve dalgalar yerinde donar, sonuç ekranı üstte kalır.

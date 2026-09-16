@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_data")
 display_name = "Eta Canavarı"
-max_health = 2000.0
+max_health = 1800.0
 speed = 32.0
 armor = 8.0
 reward = 250

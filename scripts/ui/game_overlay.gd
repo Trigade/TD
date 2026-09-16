@@ -10,6 +10,7 @@ signal quit_requested
 
 @onready var _title: Label = $Center/Panel/Margin/Content/Title
 @onready var _subtitle: Label = $Center/Panel/Margin/Content/Subtitle
+@onready var _stars: StarRow = $Center/Panel/Margin/Content/Stars
 @onready var _resume: Button = $Center/Panel/Margin/Content/Resume
 @onready var _restart: Button = $Center/Panel/Margin/Content/Restart
 @onready var _main_menu: Button = $Center/Panel/Margin/Content/MainMenu
@@ -38,8 +39,10 @@ func show_defeat(wave: int) -> void:
 	_open("İstasyon düştü!", "%d. dalgada yenildin" % wave, false, "Tekrar oyna")
 
 
-func show_victory(lives: int) -> void:
+func show_victory(lives: int, stars := 0) -> void:
 	_open("Zafer!", "İstasyon savunuldu — kalan can: %d" % lives, false, "Tekrar oyna")
+	_stars.stars = stars
+	_stars.visible = true
 
 
 func _open(title: String, subtitle: String, can_resume: bool, restart_text: String) -> void:
@@ -47,5 +50,6 @@ func _open(title: String, subtitle: String, can_resume: bool, restart_text: Stri
 	_subtitle.text = subtitle
 	_subtitle.visible = not subtitle.is_empty()
 	_resume.visible = can_resume
+	_stars.visible = false
 	_restart.text = restart_text
 	show()
