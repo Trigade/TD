@@ -89,10 +89,10 @@ Değerler ilk tahminlerdir; denge ayarı `resources/towers/*.tres` dosyalarında
 | Sürü | 25 | 170 | 0 | 3 | 1 | Kalabalık, hızlı, zayıf |
 | Zırhlı Kruvazör | 300 | 60 | 10 | 20 | 3 | Zırh her vuruştan sabit hasar düşer (en az 1 hasar geçer) |
 | Kuluçka | 160 | 75 | 2 | 5 | 2 | Ölünce yerinde 4 Sürü çıkar (aynı dalga gücüyle) |
-| **Eta Canavarı** (boss) | 2000 | 32 | 8 | 250 | 50 | 7 sn'de bir EMP yayar: 260 px içindeki kuleler 2.5 sn ateş edemez. Ekranda ayrı can çubuğu vardır. |
+| **Eta Canavarı** (boss) | 1800 | 32 | 8 | 250 | 50 | 7 sn'de bir EMP yayar: 260 px içindeki kuleler 2.5 sn ateş edemez. Ekranda ayrı can çubuğu vardır. |
 
 Tablodaki canlar 1. dalga değerleridir; düşman canı her dalgada %16 artar (13. boss dalgasında 2.92 kat).
-Oyun 13 dalgadır; 13. dalga Eta Canavarı ve eskortlarından oluşan **boss dalgasıdır**.
+Bölümler 13 dalgadır (5. bölüm 15); son dalga Eta Canavarı ve eskortlarından oluşan **boss dalgasıdır**.
 
 ## Ekonomi ve zorluk
 
@@ -124,7 +124,7 @@ Güncel sonuçlar (kalan can / kaybedilen dalga):
 
 Hedef tutmuş sayılır: tek tip kule hiçbir bölümü bitiremiyor, Normal iyi oyunla kazanılıyor,
 Zor ise ancak zırhlılara erken hazırlanan planla geçiliyor.
-Simülasyon sonunda boss.un kalan canını ve istasyona sızan düşmanları da yazar.
+Simülasyon sonunda boss'un kalan canını ve istasyona sızan düşmanları da yazar.
 
 Tüm bölümler, Normal zorluk (kalan can / kaybedilen dalga):
 
@@ -146,12 +146,12 @@ scenes/        Sahneler (.tscn)
   towers/      Kule ve mermi sahneleri
   ui/          Arayüz ve inşa menüsü
 scripts/       GDScript kodları
-  core/        Game singleton.ı, LevelData ve DifficultyData
+  core/        Game singleton'ı, LevelData ve DifficultyData
   map/         Arka plan, yol, kule noktası, istasyon
   enemies/     Düşman davranışı ve EnemyData
   towers/      Kule, mermi ve TowerData
   effects/     Patlama ve dalga halkası efekti
-  waves/       Bölüm dalga tabloları (level_01_waves.gd, level_02_waves.gd) ve dalga yöneticisi
+  waves/       Bölüm dalga tabloları (level_01_waves.gd … level_05_waves.gd) ve dalga yöneticisi
   ui/          Üst bar, dalga afişi, bildirimler, inşa ve kule menüleri, duraklatma/sonuç ekranı
 resources/
   levels/      Bölüm tanımları (.tres)
