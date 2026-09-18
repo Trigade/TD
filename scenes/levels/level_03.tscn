@@ -7,12 +7,12 @@
 
 [sub_resource type="Curve2D" id="Curve2D_path"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -60, 200, 0, 0, 0, 0, 380, 200, 0, 0, 0, 0, 380, 780, 0, 0, 0, 0, 860, 780, 0, 0, 0, 0, 860, 300, 0, 0, 0, 0, 1340, 300, 0, 0, 0, 0, 1340, 760, 0, 0, 0, 0, 1700, 760),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 0, 0, -60, 240, 0, 0, 0, 0, 1560, 240, 0, 0, 0, 0, 1560, 540, 0, 0, 0, 0, 360, 540, 0, 0, 0, 0, 360, 840, 0, 0, 0, 0, 1700, 840),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
 }
-point_count = 8
+point_count = 6
 
-[node name="Level01" type="Node2D"]
+[node name="Level03" type="Node2D"]
 
 [node name="SpaceBackground" type="Node2D" parent="."]
 script = ExtResource("1_bg")
@@ -24,35 +24,35 @@ script = ExtResource("2_path")
 [node name="TowerSlots" type="Node2D" parent="."]
 
 [node name="Slot01" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(230, 330)
+position = Vector2(560, 390)
 
 [node name="Slot02" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(520, 480)
+position = Vector2(960, 390)
 
 [node name="Slot03" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(250, 640)
+position = Vector2(1360, 390)
 
 [node name="Slot04" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(620, 650)
+position = Vector2(560, 690)
 
 [node name="Slot05" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(720, 400)
+position = Vector2(960, 690)
 
 [node name="Slot06" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(1000, 520)
+position = Vector2(1360, 690)
 
 [node name="Slot07" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(1100, 192)
+position = Vector2(210, 690)
 
 [node name="Slot08" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(1200, 430)
+position = Vector2(1710, 390)
 
 [node name="Slot09" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(1480, 560)
+position = Vector2(1000, 980)
 
 [node name="Slot10" parent="TowerSlots" instance=ExtResource("3_slot")]
-position = Vector2(1540, 900)
+position = Vector2(1200, 980)
 
 [node name="Station" type="Node2D" parent="."]
-position = Vector2(1700, 760)
+position = Vector2(1700, 840)
 script = ExtResource("4_station")

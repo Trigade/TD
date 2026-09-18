@@ -28,6 +28,8 @@ const SPLIT_SPACING := 14.0
 @export var auto_start := false
 ## Zorluk seviyesinin düşman canı çarpanı.
 @export var health_multiplier := 1.0
+## Boss'ların zorluk ve bölüm çarpanı; normal düşmanlarınkinden ayrı ayarlanır.
+@export var boss_health_multiplier := 1.0
 
 ## Bu bölümün dalga tablosu; ana sahne LevelData'dan doldurur.
 var waves: Array = []
@@ -58,7 +60,8 @@ func _process(delta: float) -> void:
 		State.RUNNING:
 			_wave_time += delta
 			while not _pending.is_empty() and _pending[0].time <= _wave_time:
-				_spawn(_pending.pop_front().enemy, _wave_health_multiplier())
+				var data: EnemyData = _pending.pop_front().enemy
+				_spawn(data, _wave_health_multiplier(data))
 			if _pending.is_empty() and _alive == 0:
 				_finish_wave()
 
@@ -123,8 +126,9 @@ func _finish_wave() -> void:
 		_start_countdown(break_between_waves)
 
 
-func _wave_health_multiplier() -> float:
-	return (1.0 + health_growth_per_wave * (current_wave - 1)) * health_multiplier
+func _wave_health_multiplier(data: EnemyData) -> float:
+	var growth := 1.0 + health_growth_per_wave * (current_wave - 1)
+	return growth * (boss_health_multiplier if data.is_boss else health_multiplier)
 
 
 func _spawn(data: EnemyData, enemy_health_multiplier: float, at_progress := 0.0) -> void:

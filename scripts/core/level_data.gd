@@ -12,6 +12,10 @@ extends Resource
 @export var waves_script: GDScript
 ## Zorluğun verdiği paraya eklenir.
 @export var starting_money_bonus := 0
+## Bölümün kendi zorluğu: düşman canı zorluk çarpanıyla birlikte bununla da çarpılır.
+@export var enemy_health_multiplier := 1.0
+## Boss'ların canı için ayrı çarpan (enemy_health_multiplier yerine kullanılır).
+@export var boss_health_multiplier := 1.0
 
 
 func waves() -> Array:

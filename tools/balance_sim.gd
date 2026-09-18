@@ -54,6 +54,12 @@ func _initialize() -> void:
 	if overrides.has("difficulty_mult"):
 		game.difficulty.health_multiplier = float(overrides["difficulty_mult"])
 		_tweaked.append(game.difficulty)
+	if overrides.has("level_mult"):
+		game.level.enemy_health_multiplier = float(overrides["level_mult"])
+		_tweaked.append(game.level)
+	if overrides.has("boss_mult"):
+		game.level.boss_health_multiplier = float(overrides["boss_mult"])
+		_tweaked.append(game.level)
 	if overrides.has("money_bonus"):
 		game.level.starting_money_bonus = int(overrides["money_bonus"])
 		_tweaked.append(game.level)

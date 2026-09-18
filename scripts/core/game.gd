@@ -6,6 +6,9 @@ extends Node
 const LEVELS := [
 	preload("res://resources/levels/level_01.tres"),
 	preload("res://resources/levels/level_02.tres"),
+	preload("res://resources/levels/level_03.tres"),
+	preload("res://resources/levels/level_04.tres"),
+	preload("res://resources/levels/level_05.tres"),
 ]
 const DIFFICULTIES := [
 	preload("res://resources/difficulties/easy.tres"),

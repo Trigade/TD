@@ -40,7 +40,8 @@ func _ready() -> void:
 	tower_slots = map.get_node("TowerSlots")
 	wave_manager.path = map.get_node("EnemyPath")
 	wave_manager.waves = level.waves()
-	wave_manager.health_multiplier = difficulty.health_multiplier
+	wave_manager.health_multiplier = difficulty.health_multiplier * level.enemy_health_multiplier
+	wave_manager.boss_health_multiplier = difficulty.health_multiplier * level.boss_health_multiplier
 
 	for slot: TowerSlot in tower_slots.get_children():
 		slot.clicked.connect(_on_slot_clicked)

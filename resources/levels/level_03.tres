@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/level_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://scenes/levels/level_03.tscn" id="2_map"]
+[ext_resource type="Script" path="res://scripts/waves/level_03_waves.gd" id="3_waves"]
+
+[resource]
+script = ExtResource("1_data")
+id = "level_03"
+display_name = "3. Bölüm — Kıvrım Kuşağı"
+description = "Üç şeritli uzun yol. Sürüler ve kuluçkalar akın ediyor; Nova Havanı burada parlar."
+map_scene = ExtResource("2_map")
+waves_script = ExtResource("3_waves")
+starting_money_bonus = 60
+enemy_health_multiplier = 1.45
+boss_health_multiplier = 1.45

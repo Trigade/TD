@@ -17,7 +17,8 @@ const BOSS_COLOR := Color(1.0, 0.4, 0.55)
 var _shown_lives := -1
 var _banner_tween: Tween
 var _lives_tween: Tween
-var _boss: Enemy
+## Sahnedeki canlı boss'lar; çubuk ilkini gösterir, birden fazlaysa adın yanında sayı yazar.
+var _bosses: Array[Enemy] = []
 
 @onready var build_menu: BuildMenu = $BuildMenu
 @onready var tower_menu: TowerMenu = $TowerMenu
@@ -45,11 +46,15 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not _boss_bar.visible:
 		return
-	if is_instance_valid(_boss) and _boss.health > 0.0:
-		_boss_health.value = _boss.health / _boss.max_health
-	else:
-		_boss = null
+	for i in range(_bosses.size() - 1, -1, -1):
+		if not is_instance_valid(_bosses[i]) or _bosses[i].health <= 0.0:
+			_bosses.remove_at(i)
+	if _bosses.is_empty():
 		_boss_bar.hide()
+		return
+	var boss := _bosses[0]
+	_boss_health.value = boss.health / boss.max_health
+	_boss_name.text = boss.data.display_name if _bosses.size() == 1 else "%s ×%d" % [boss.data.display_name, _bosses.size()]
 
 
 func set_stats(lives: int, money: int, wave: int, total_waves: int) -> void:
@@ -85,9 +90,10 @@ func announce_boss_wave(wave: int, total_waves: int) -> void:
 
 ## Boss sahneye çıktığında üst ortada adını ve can çubuğunu gösterir; boss ölünce kendiliğinden gizlenir.
 func show_boss(enemy: Enemy) -> void:
-	_boss = enemy
-	_boss_name.text = enemy.data.display_name
-	_boss_health.value = 1.0
+	_bosses.append(enemy)
+	if _bosses.size() == 1:
+		_boss_name.text = enemy.data.display_name
+		_boss_health.value = 1.0
 	_boss_bar.show()
 
 

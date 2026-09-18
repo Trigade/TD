@@ -14,10 +14,17 @@ geri sayımla gelir ve erken çağrılabilir. Duraklatma ve sonuç ekranlarında
 
 ### Bölümler ve zorluk
 
-| Bölüm | Harita | Başlangıç parası |
-|---|---|---|
-| 1. Bölüm — Eta Yörüngesi | 3280 px yol, 10 kule noktası | zorluğun parası |
-| 2. Bölüm — Nebula Geçidi | 3140 px yol, farklı kıvrımlar; zırhlılar erken gelir | zorluğun parası + 100 |
+| Bölüm | Yol | Dalga | Karakter | Ek para | Düşman / boss canı |
+|---|---|---|---|---|---|
+| 1. Eta Yörüngesi | 3280 px | 13 | Dengeli giriş | — | ×1.0 / ×1.0 |
+| 2. Nebula Geçidi | 3140 px | 13 | Zırhlılar erken gelir | +100 | ×1.1 / ×1.0 |
+| 3. Kıvrım Kuşağı | 4760 px | 13 | Sürü ve kuluçka akını | +60 | ×1.45 / ×1.45 |
+| 4. Toz Sütunları | 3880 px | 13 | Zırhlı kruvazör filoları | +100 | ×1.05 / ×0.95 |
+| 5. Eta'nın Kalbi | 6320 px | 15 | 9. dalgada boss, finalde iki boss | +150 | ×1.75 / ×1.3 |
+
+Bölüm çarpanları zorluk çarpanıyla birlikte uygulanır (`LevelData.enemy_health_multiplier`,
+`boss_health_multiplier`). Boss çarpanı ayrıdır; aksi halde istasyona ulaşan boss oyunu anında
+bitirdiği için bölümün zorluğu "ya hep ya hiç" oluyordu.
 
 | Zorluk | Can | Para | Düşman canı |
 |---|---|---|---|
@@ -25,7 +32,7 @@ geri sayımla gelir ve erken çağrılabilir. Duraklatma ve sonuç ekranlarında
 | Normal | 20 | 100 | ×1.0 |
 | Zor | 18 | 100 | ×1.1 |
 
-2. bölüm, 1. bölümden en az 1 yıldız alınınca açılır.
+Her bölüm, bir öncekinden en az 1 yıldız alınınca açılır.
 
 ### Seçenekler
 
@@ -118,6 +125,16 @@ Güncel sonuçlar (kalan can / kaybedilen dalga):
 Hedef tutmuş sayılır: tek tip kule hiçbir bölümü bitiremiyor, Normal iyi oyunla kazanılıyor,
 Zor ise ancak zırhlılara erken hazırlanan planla geçiliyor.
 Simülasyon sonunda boss.un kalan canını ve istasyona sızan düşmanları da yazar.
+
+Tüm bölümler, Normal zorluk (kalan can / kaybedilen dalga):
+
+| Strateji | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| `karma` (önce Foton) | 17 can | 8. dalga | 13. dalga (boss) | 5. dalga | 14. dalga |
+| `karma_plazma` (erken Plazma) | 17 can | 19 can | 11 can | 11 can | 10 can |
+
+Kolay'da önce Foton diken plan da 3, 4 ve 5. bölümleri kazanır. Zor'da 3–5. bölümleri sabit
+planlar geçemiyor; bu bölümler haritaya göre kule seçmeyi (ör. 3. bölümde Nova) gerektiren uzman seviyesidir.
 
 ## Klasör yapısı
 
